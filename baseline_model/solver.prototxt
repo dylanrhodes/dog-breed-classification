@@ -1,10 +1,10 @@
 net: "/root/tools/baseline_model/train_val.prototxt"
-test_iter: 70
+test_iter: 10
 test_interval: 10
 base_lr: 0.0000001
 lr_policy: "step"
 gamma: 0.90
-stepsize: 1000
+stepsize: 100
 display: 10
 max_iter: 5000
 momentum: 0.9
