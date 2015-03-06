@@ -59,5 +59,5 @@ def fill_in_db(img_list, database):
 
 	database.close()
 
-fill_in_db(data_db, train_list)
-fill_in_db(test_db, test_list)
+fill_in_db(train_list, data_db)
+fill_in_db(test_list, test_db)
