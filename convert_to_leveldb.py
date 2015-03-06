@@ -37,6 +37,7 @@ for i in xrange(NUM_BATCHES):
 		img = imresize(img, size=(256, 256), interp='bicubic')
 		mean += np.mean(img, axis=(0, 1))
 		num_images += 1
+		if num_images % 100 == 0: print '{} images processed...'.format(num_images)
 
 		img = img[:, :, (2, 1, 0)]
 		img = img.transpose((2, 0, 1))

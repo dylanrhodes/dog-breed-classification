@@ -11,7 +11,7 @@ layer {
 #    mirror: true
 #    crop_size: 227
 #    mean_file: "data/ilsvrc12/imagenet_mean.binaryproto"
-#  }
+#  } [101, 119, 124] <-- mean of channels (in BGR order)
 # mean pixel / channel-wise mean instead of mean image
   transform_param {
     crop_size: 227
@@ -23,7 +23,7 @@ layer {
   data_param {
     source: "/tmp/data_db"
     batch_size: 256
-    backend: LMDB
+    backend: LEVELDB
   }
 }
 layer {
@@ -50,7 +50,7 @@ layer {
   data_param {
     source: "/tmp/data_db"
     batch_size: 50
-    backend: LMDB
+    backend: LEVELDB
   }
 }
 layer {
