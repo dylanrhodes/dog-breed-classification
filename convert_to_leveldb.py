@@ -42,7 +42,7 @@ def fill_in_db(img_list, database):
 			
 			if num_images % 100 == 0: 
 				print '{} images processed...'.format(num_images)
-				print 'SHAPE: {}, LABEL: {}, TAG: {}'.format(img.shape, int(curr_dog[0:3]), curr_dog[3:23])
+				print 'SHAPE: {}, LABEL: {}, TAG: {}'.format(img.shape, int(curr_dog[0:3]), curr_dog[:20])
 
 			img = img[:, :, (2, 1, 0)]
 			img = img.transpose((2, 0, 1))
@@ -63,7 +63,7 @@ def fill_in_db(img_list, database):
 	database.close()
 
 print 'PROCESSING TRAINING DATA...\n'
-fill_in_db(train_list, data_db)
+fill_in_db(train_list[:512], data_db)
 
 print 'PROCESSING TEST DATA...\n'
-fill_in_db(train_list, test_db)
+fill_in_db(train_list[:512], test_db)
