@@ -39,7 +39,10 @@ def fill_in_db(img_list, database):
 			img = imresize(img, size=(256, 256), interp='bicubic')
 			mean += np.mean(img, axis=(0, 1))
 			num_images += 1
-			if num_images % 100 == 0: print '{} images processed...'.format(num_images)
+			
+			if num_images % 100 == 0: 
+				print '{} images processed...'.format(num_images)
+				print 'SHAPE: {}, LABEL: {}, TAG: {}'.format(img.shape, int(curr_dog[0:3]), curr_dog[3:23])
 
 			img = img[:, :, (2, 1, 0)]
 			img = img.transpose((2, 0, 1))
