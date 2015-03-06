@@ -66,4 +66,4 @@ print 'PROCESSING TRAINING DATA...\n'
 fill_in_db(train_list, data_db)
 
 print 'PROCESSING TEST DATA...\n'
-fill_in_db(test_list, test_db)
+fill_in_db(train_list, test_db)
