@@ -36,7 +36,7 @@ def fill_in_db(img_list, database):
 			except:
 				continue
 
-			img = imresize(img, size=(256, 256), interp='bicubic')
+			img = imresize(img, size=(228, 228), interp='bicubic')
 			mean += np.mean(img, axis=(0, 1))
 			num_images += 1
 			
