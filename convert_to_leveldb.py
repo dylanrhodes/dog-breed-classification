@@ -59,5 +59,8 @@ def fill_in_db(img_list, database):
 
 	database.close()
 
+print 'PROCESSING TRAINING DATA...\n'
 fill_in_db(train_list, data_db)
+
+print 'PROCESSING TEST DATA...\n'
 fill_in_db(test_list, test_db)

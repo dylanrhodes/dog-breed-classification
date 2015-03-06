@@ -48,7 +48,7 @@ layer {
     mirror: true
   }
   data_param {
-    source: "/tmp/data_db"
+    source: "/tmp/test_db"
     batch_size: 50
     backend: LEVELDB
   }
