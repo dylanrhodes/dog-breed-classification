@@ -1,4 +1,4 @@
-name: "CaffeNet"
+name: "BaselineCaffeNet"
 input: "data"
 input_dim: 10
 input_dim: 3
@@ -196,12 +196,12 @@ layer {
   }
 }
 layer {
-  name: "fc8"
+  name: "my-fc8"
   type: "InnerProduct"
   bottom: "fc7"
   top: "fc8"
   inner_product_param {
-    num_output: 1000
+    num_output: 133
   }
 }
 layer {
