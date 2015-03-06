@@ -17,42 +17,47 @@ random.shuffle(train_list)
 test_list = get_testing_list()
 
 data_db = plyvel.DB('/tmp/data_db', create_if_missing=True)
+test_db = plyvel.DB('/tmp/test_db', create_if_missing=True)
 
-batch_size = len(train_list) / NUM_BATCHES
+def fill_in_db(img_list, database):
+	batch_size = len(img_list) / NUM_BATCHES
 
-mean = np.zeros(3)
-num_images = 0
+	mean = np.zeros(3)
+	num_images = 0
 
-for i in xrange(NUM_BATCHES):
-	dwb = data_db.write_batch()
+	for i in xrange(NUM_BATCHES):
+		wb = database.write_batch()
 
-	for j in range(i * batch_size, min((i+1) * batch_size, len(train_list))):
-		curr_dog = train_list[j]
-		img_file = DATA_PREFIX + curr_dog + '.jpg'
-		try:
-			img = caffe.io.load_image(img_file)
-		except:
-			continue
+		for j in range(i * batch_size, min((i+1) * batch_size, len(img_list))):
+			curr_dog = img_list[j]
+			img_file = DATA_PREFIX + curr_dog + '.jpg'
+			try:
+				img = caffe.io.load_image(img_file)
+			except:
+				continue
 
-		img = imresize(img, size=(256, 256), interp='bicubic')
-		mean += np.mean(img, axis=(0, 1))
-		num_images += 1
-		if num_images % 100 == 0: print '{} images processed...'.format(num_images)
+			img = imresize(img, size=(256, 256), interp='bicubic')
+			mean += np.mean(img, axis=(0, 1))
+			num_images += 1
+			if num_images % 100 == 0: print '{} images processed...'.format(num_images)
 
-		img = img[:, :, (2, 1, 0)]
-		img = img.transpose((2, 0, 1))
-		img = img.astype(np.uint8, copy=False)
+			img = img[:, :, (2, 1, 0)]
+			img = img.transpose((2, 0, 1))
+			img = img.astype(np.uint8, copy=False)
 
-		label_dict, label_arr = load_dog(train_list[j])
-		label = int(curr_dog[0:3])
+			label_dict, label_arr = load_dog(img_list[j])
+			label = int(curr_dog[0:3])
 
-		img_datum= caffe.io.array_to_datum(img, label)
+			img_datum= caffe.io.array_to_datum(img, label)
 
-		dwb.put('%08d_%s'.format(i, train_list[j]), img_datum.SerializeToString())
+			wb.put('%08d_%s'.format(i, img_list[j]), img_datum.SerializeToString())
 
-	dwb.write()
+		wb.write()
 
-mean /= num_images
-print 'MEAN OF CHANNELS: ' + str(mean)
+	mean /= num_images
+	print 'MEAN OF CHANNELS: ' + str(mean)
 
-data_db.close()
+	database.close()
+
+fill_in_db(data_db, train_list)
+fill_in_db(test_db, test_list)
