@@ -125,7 +125,7 @@ def get_training_list():
 def get_testing_list():
 	test_images = []
 
-	with open('../CU_Dogs/testing.txt', 'rb') as in_file:
+	with open('/root/CU_Dogs/testing.txt', 'rb') as in_file:
 		for line in in_file.readlines():
 			test_images.append(line.strip().replace('.jpg', ''))
 
