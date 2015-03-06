@@ -20,7 +20,8 @@ data_db = plyvel.DB('/tmp/data_db', create_if_missing=True)
 
 batch_size = len(train_list) / NUM_BATCHES
 
-mean = np.zeros((3,1))
+mean = np.zeros(3)
+num_images = 0
 
 for i in xrange(NUM_BATCHES):
 	dwb = data_db.write_batch()
@@ -34,8 +35,8 @@ for i in xrange(NUM_BATCHES):
 			continue
 
 		img = imresize(img, size=(256, 256), interp='bicubic')
-		import pdb; pdb.set_trace()
-		mean += np.mean(img, axis=3)
+		mean += np.mean(img, axis=(0, 1))
+		num_images += 1
 
 		img = img[:, :, (2, 1, 0)]
 		img = img.transpose((2, 0, 1))
@@ -49,5 +50,8 @@ for i in xrange(NUM_BATCHES):
 		dwb.put('%08d_%s'.format(i, train_list[j]), img_datum.SerializeToString())
 
 	dwb.write()
+
+mean /= num_images
+print 'MEAN OF CHANNELS: ' + str(mean)
 
 data_db.close()
