@@ -48,7 +48,7 @@ layer {
     mirror: true
   }
   data_param {
-    source: "/tmp/test_db"
+    source: "/tmp/data2_db"
     batch_size: 50
     backend: LEVELDB
   }
@@ -330,7 +330,7 @@ layer {
     decay_mult: 0
   }
   inner_product_param {
-    num_output: 4096
+    num_output: 128
     weight_filler {
       type: "gaussian"
       std: 0.005
