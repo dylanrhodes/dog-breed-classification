@@ -20,7 +20,7 @@ data_db = plyvel.DB('/tmp/data_db', create_if_missing=True)
 
 batch_size = len(train_list) / NUM_BATCHES
 
-mean = np.zeros(3,1)
+mean = np.zeros((3,1))
 
 for i in xrange(NUM_BATCHES):
 	dwb = data_db.write_batch()
