@@ -36,7 +36,7 @@ def fill_in_db(img_list, database):
 			except:
 				continue
 
-			img = imresize(img, size=(228, 228), interp='bicubic')
+			img = imresize(img, size=(129, 129), interp='bicubic')
 			mean += np.mean(img, axis=(0, 1))
 			num_images += 1
 			
@@ -66,4 +66,4 @@ print 'PROCESSING TRAINING DATA...\n'
 fill_in_db(train_list[:3000], data_db)
 
 print 'PROCESSING TEST DATA...\n'
-fill_in_db(train_list[2500:3500], test_db)
+fill_in_db(train_list[2000:3000], test_db)

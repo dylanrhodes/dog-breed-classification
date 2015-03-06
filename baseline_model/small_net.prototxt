@@ -9,7 +9,7 @@ layer {
   }
 # mean pixel / channel-wise mean instead of mean image
   transform_param {
-    crop_size: 227
+    crop_size: 128
     mean_value: 101
     mean_value: 119
     mean_value: 124
@@ -17,7 +17,7 @@ layer {
   }
   data_param {
     source: "/tmp/data_db"
-    batch_size: 300
+    batch_size: 50
     backend: LEVELDB
   }
 }
@@ -31,7 +31,7 @@ layer {
   }
 # mean pixel / channel-wise mean instead of mean image
   transform_param {
-    crop_size: 227
+    crop_size: 128
     mean_value: 101
     mean_value: 119
     mean_value: 124
@@ -39,7 +39,7 @@ layer {
   }
   data_param {
     source: "/tmp/test_db"
-    batch_size: 100
+    batch_size: 50
     backend: LEVELDB
   }
 }
@@ -57,9 +57,9 @@ layer {
     decay_mult: 1
   }
   convolution_param {
-    num_output: 128
-    pad: 2
-    kernel_size: 5
+    num_output: 64
+    pad: 3
+    kernel_size: 7
     stride: 1
     weight_filler {
       type: "gaussian"
@@ -102,7 +102,7 @@ layer {
     decay_mult: 1
   }
   convolution_param {
-    num_output: 256
+    num_output: 128
     pad: 1
     kernel_size: 3
     stride: 1
