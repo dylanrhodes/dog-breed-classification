@@ -1,3 +1,4 @@
+import cPickle as pickle
 from lasagne import layers
 from lasagne.updates import nesterov_momentum
 import matplotlib.pyplot as plt
@@ -176,5 +177,7 @@ X_train, y_train = load_data(train_list)
 X_test, y_test = load_data(test_list[:100])
 
 conv_net = train_conv_network(X_train, y_train)
+
+pickle.dump(conv_net, file('conv_net.pk', 'wb'), protocol=pickle.HIGHEST_PROTOCOL)
 
 import pdb; pdb.set_trace()
