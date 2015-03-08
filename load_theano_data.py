@@ -91,13 +91,14 @@ class AugmentBatchIterator(BatchIterator):
 		Xb[flip_idx] = Xb[flip_idx, :, ::-1, :]
 
 		if yb is not None:
-			yb[flip_idx, 0] = yb[flip_idx, 0] * -1
+			x_cols = np.array([i for i in xrange(len(yb[0])) if i % 2 == 0])
+			yb[flip_idx, x_cols] = yb[flip_idx, x_cols] * -1
 
 			# Swap left parts for right parts eg. LEFT EYE <-> RIGHT EYE
 			for idx_pair in PART_FLIP_IDXS:
-				tmp = yb[:, (2 * idx_pair[0]):(2 * idx_pair[0] + 1)]
-				yb[:, (2 * idx_pair[0]):(2 * idx_pair[0] + 1)] = yb[:, (2 * idx_pair[1]):(2 * idx_pair[1] + 1)]
-				yb[:, (2 * idx_pair[1]):(2 * idx_pair[1] + 1)] = tmp
+				tmp = yb[flip_idx, (2 * idx_pair[0]):(2 * idx_pair[0] + 1)]
+				yb[flip_idx, (2 * idx_pair[0]):(2 * idx_pair[0] + 1)] = yb[:, (2 * idx_pair[1]):(2 * idx_pair[1] + 1)]
+				yb[flip_idx, (2 * idx_pair[1]):(2 * idx_pair[1] + 1)] = tmp
 
 		return Xb, yb
 
@@ -207,4 +208,4 @@ print "MEAN SQUARED ERROR: {}".format(mean_squared_error(conv_net.predict(X_test
 
 pickle.dump(conv_net, file('conv_net_dropout_large.pk', 'wb'), protocol=pickle.HIGHEST_PROTOCOL)
 
-import pdb; pdb.set_trace()
+pdb.set_trace()
