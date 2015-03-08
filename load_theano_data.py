@@ -67,8 +67,11 @@ dense_net = NeuralNet(
 train_list = get_training_list()
 test_list = get_testing_list()
 
+random.shuffle(train_list)
+random.shuffle(test_list)
+
 X_train, y_train = load_data(train_list)
-#X_test, y_test = load_data(test_list)
+X_test, y_test = load_data(test_list[:100])
 
 dense_net.fit(X_train, y_train)
 
@@ -83,3 +86,19 @@ plt.xlabel("epoch")
 plt.ylabel("loss")
 plt.yscale("log")
 plt.show()
+
+def plot_sample(x, y, axis):
+    axis.imshow(x)
+    axis.scatter(y[0] * 64 + 64, y[1] * 64 + 64, marker='x', s=10)
+
+y_pred = dense_net.predict(X_test)
+
+fig = plt.figure(figsize=(6, 6))
+fig.subplots_adjust(
+    left=0, right=1, bottom=0, top=1, hspace=0.05, wspace=0.05)
+
+for i in range(16):
+    ax = fig.add_subplot(4, 4, i + 1, xticks=[], yticks=[])
+    plot_sample(X_test[i], y_pred[i], ax)
+
+pyplot.show()
