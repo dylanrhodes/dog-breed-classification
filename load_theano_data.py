@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from nolearn.lasagne import NeuralNet, BatchIterator
 import random
 from scipy.misc import imread, imresize
+import theano
 
 from extract_training_faces import *
 
