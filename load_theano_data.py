@@ -127,8 +127,8 @@ def plot_predictions(network, X, y):
 	    axis.scatter(y_pred[0] * 64 + 64, y_pred[i] * 64 + 64, marker='x', color='r', s=10)
 
 	for i in range(16):
-    	ax = fig.add_subplot(4, 4, i + 1, xticks=[], yticks=[])
-    	plot_sample(X[i], y[i], y_pred[i], ax)
+		ax = fig.add_subplot(4, 4, i + 1, xticks=[], yticks=[])
+		plot_sample(X[i], y[i], y_pred[i], ax)
 
 	plt.show()
 
