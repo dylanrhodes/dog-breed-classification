@@ -22,13 +22,14 @@ def load_data(img_list):
 	for idx, dog_path in enumerate(img_list):
 		img = imread(IMAGE_PREFIX.format(dog_path))
 		orig_size = img.shape
+	
 		try:
 			img = imresize(img, (IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS))
-		except:
-			import pdb; pdb.set_trace()
-		point_dict, point_arr = load_dog(dog_path)
+			X[idx,:,:,:] = img
+		except IndexError:
+			continue # Skip malformed files in dataset
 
-		X[idx,:,:,:] = img
+		point_dict, point_arr = load_dog(dog_path)
 
 		x_scale = IMAGE_SIZE * 1.0 / orig_size[1]
 		y_scale = IMAGE_SIZE * 1.0 / orig_size[0]
