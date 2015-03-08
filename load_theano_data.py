@@ -26,13 +26,11 @@ def load_data(img_list):
 
 		X[idx,:,:,:] = img
 
-		y_scale = IMAGE_SIZE * 1.0 / orig_size[0]
 		x_scale = IMAGE_SIZE * 1.0 / orig_size[1]
+		y_scale = IMAGE_SIZE * 1.0 / orig_size[0]
 
-		scaled_loc = np.array([point_dict['NOSE'][0] * y_scale, point_dict['NOSE'][1] * x_scale])
+		scaled_loc = np.array([point_dict['NOSE'][0] * x_scale], point_dict['NOSE'][1] * y_scale)
 		y[idx,:] = scaled_loc
-
-		import pdb; pdb.set_trace()
 
 	return X, y
 
@@ -43,7 +41,7 @@ dense_net = NeuralNet(
         ('output', layers.DenseLayer),
         ],
     # layer parameters:
-    input_shape=(None, IMAGE_SIZE * IMAGE_SIZE),  # 96x96 input pixels per batch
+    input_shape=(None, IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS),  # 96x96 input pixels per batch
     hidden_num_units=100,  
     output_nonlinearity=None,  # output layer uses identity function
     output_num_units=30,  # 30 target values
@@ -54,7 +52,7 @@ dense_net = NeuralNet(
     update_momentum=0.9,
 
     regression=True,  # flag to indicate we're dealing with regression problem
-    max_epochs=400,  # we want to train this many epochs
+    max_epochs=50,  # we want to train this many epochs
     verbose=1,
     )
 
