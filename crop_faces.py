@@ -20,10 +20,10 @@ def crop_box(img, bounding_box, slope):
 	
 	box_rotate = rotation_mat.dot(bounding_box.T)
 
-	x_min = round((box_rotate[0,0] + box_rotate[0,1]) / 2)
-	x_max = round((box_rotate[0,2] + box_rotate[0,3]) / 2)
-	y_min = round((box_rotate[1,0] + box_rotate[1,3]) / 2)
-	y_max = round((box_rotate[1,1] + box_rotate[1,2]) / 2)
+	x_min = max(round((box_rotate[0,0] + box_rotate[0,1]) / 2), 0.0)
+	x_max = min(round((box_rotate[0,2] + box_rotate[0,3]) / 2), img_rotate.shape[1])
+	y_min = max(round((box_rotate[1,0] + box_rotate[1,3]) / 2), 0.0)
+	y_max = min(round((box_rotate[1,1] + box_rotate[1,2]) / 2), img_rotate.shape[0])
 
 	try:
 		cropped_img = img_rotate[y_min:y_max, x_min:x_max, :]
