@@ -104,20 +104,24 @@ def train_conv_network(X, y):
 			('input', layers.InputLayer),
 			('conv1', layers.Conv2DLayer),
 			('pool1', layers.MaxPool2DLayer),
+			('dropout1', layers.DropoutLayer),
         	('conv2', layers.Conv2DLayer),
 	        ('pool2', layers.MaxPool2DLayer),
+	        ('dropout2', layers.DropoutLayer),
 	        ('conv3', layers.Conv2DLayer),
 	        ('pool3', layers.MaxPool2DLayer),
+	        ('dropout3', layers.DropoutLayer),
 	        ('hidden4', layers.DenseLayer),
+	        ('dropout4', layers.DropoutLayer),
 	        ('hidden5', layers.DenseLayer),
 	        ('output', layers.DenseLayer),
 		],
 
 		input_shape=(None, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE),
-	    conv1_num_filters=32, conv1_filter_size=(3, 3), pool1_ds=(2, 2),
-	    conv2_num_filters=64, conv2_filter_size=(2, 2), pool2_ds=(2, 2),
-	    conv3_num_filters=128, conv3_filter_size=(2, 2), pool3_ds=(2, 2),
-	    hidden4_num_units=500, hidden5_num_units=500,
+	    conv1_num_filters=32, conv1_filter_size=(3, 3), pool1_ds=(2, 2), dropout1_p=0.3,
+	    conv2_num_filters=64, conv2_filter_size=(2, 2), pool2_ds=(2, 2), dropout2_p=0.4,
+	    conv3_num_filters=128, conv3_filter_size=(2, 2), pool3_ds=(2, 2), dropout3_p=0.5,
+	    hidden4_num_units=500, dropout4_p=0.5, hidden5_num_units=500,
 	    output_num_units=2, output_nonlinearity=None,
 
 	    batch_iterator_train=AugmentBatchIterator(batch_size=256),
@@ -158,9 +162,10 @@ def plot_predictions(network, X, y):
 	fig.subplots_adjust(left=0, right=1, bottom=0, top=1, hspace=0.05, wspace=0.05)
 
 	def plot_sample(img, y, y_pred, axis):
-	    axis.imshow(img)
-	    axis.scatter(y[0] * 64 + 64, y[1] * 64 + 64, marker='x', color='g', s=10)
-	    axis.scatter(y_pred[0] * 64 + 64, y_pred[i] * 64 + 64, marker='x', color='r', s=10)
+		scale = IMAGE_SIZE / 2
+	    axis.imshow(img.transpose((2, 1, 0)))
+	    axis.scatter(y[0] * scale + scale, y[1] * scale + scale, marker='x', color='g', s=10)
+	    axis.scatter(y_pred[0] * scale + scale, y_pred[i] * scale + scale, marker='x', color='r', s=10)
 
 	for i in range(16):
 		ax = fig.add_subplot(4, 4, i + 1, xticks=[], yticks=[])
@@ -179,6 +184,6 @@ X_test, y_test = load_data(test_list[:100])
 
 conv_net = train_conv_network(X_train, y_train)
 
-pickle.dump(conv_net, file('conv_net.pk', 'wb'), protocol=pickle.HIGHEST_PROTOCOL)
+pickle.dump(conv_net, file('conv_net_dropout.pk', 'wb'), protocol=pickle.HIGHEST_PROTOCOL)
 
 import pdb; pdb.set_trace()
