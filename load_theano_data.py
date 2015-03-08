@@ -53,8 +53,6 @@ def load_data(img_list):
 		point_arr = np.reshape(point_arr, (1, point_arr.shape[0] * point_arr.shape[1]))
 		y[idx,:] = point_arr.astype(np.float32)
 
-		pdb.set_trace()
-
 		if idx % 100 == 0: print '{} IMAGES LOADED...'.format(idx)
 
 	return X, y
