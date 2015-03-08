@@ -29,7 +29,7 @@ def load_data(img_list):
 		y_scale = IMAGE_SIZE * 1.0 / orig_size[0]
 		x_scale = IMAGE_SIZE * 1.0 / orig_size[1]
 
-		scaled_loc = np.array([point_dict['NOSE'] * y_scale, point_dict['NOSE'] * x_scale])
+		scaled_loc = np.array([point_dict['NOSE'][0] * y_scale, point_dict['NOSE'][1] * x_scale])
 		y[idx,:] = scaled_loc
 
 		import pdb; pdb.set_trace()
