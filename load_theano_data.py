@@ -163,9 +163,10 @@ def plot_predictions(network, X, y):
 
 	def plot_sample(img, y, y_pred, axis):
 		scale = IMAGE_SIZE / 2
-	    axis.imshow(img.transpose((2, 1, 0)))
-	    axis.scatter(y[0] * scale + scale, y[1] * scale + scale, marker='x', color='g', s=10)
-	    axis.scatter(y_pred[0] * scale + scale, y_pred[i] * scale + scale, marker='x', color='r', s=10)
+
+		axis.imshow(img.transpose((2, 1, 0)))
+		axis.scatter(y[0] * scale + scale, y[1] * scale + scale, marker='x', color='g', s=10)
+		axis.scatter(y_pred[0] * scale + scale, y_pred[i] * scale + scale, marker='x', color='r', s=10)
 
 	for i in range(16):
 		ax = fig.add_subplot(4, 4, i + 1, xticks=[], yticks=[])
