@@ -1,5 +1,6 @@
 from lasagne import layers
 from lasagne.updates import nesterov_momentum
+import matplotlib.pyplot as plt
 from nolearn.lasagne import NeuralNet
 import random
 from scipy.misc import imread, imresize
@@ -40,7 +41,6 @@ def load_data(img_list):
 
 		if idx % 100 == 0: print '{} IMAGES LOADED...'.format(idx)
 
-	import pdb; pdb.set_trace()
 	return X, y
 
 dense_net = NeuralNet(
@@ -72,3 +72,14 @@ X_train, y_train = load_data(train_list)
 
 dense_net.fit(X_train, y_train)
 
+train_loss = np.array([i["train_loss"] for i in net1.train_history_])
+valid_loss = np.array([i["valid_loss"] for i in net1.train_history_])
+
+plt.plot(train_loss, linewidth=3, label="train")
+plt.plot(valid_loss, linewidth=3, label="valid")
+plt.grid()
+plt.legend()
+plt.xlabel("epoch")
+plt.ylabel("loss")
+plt.yscale("log")
+plt.show()
