@@ -25,7 +25,12 @@ def load_data(img_list):
 		point_dict, point_arr = load_dog(dog_path)
 
 		X[idx,:,:,:] = img
-		y[idx,:] = point_dict['NOSE']
+
+		y_scale = IMAGE_SIZE * 1.0 / orig_size[0]
+		x_scale = IMAGE_SIZE * 1.0 / orig_size[1]
+
+		scaled_loc = np.array([point_dict['NOSE'] * y_scale, point_dict['NOSE'] * x_scale])
+		y[idx,:] = scaled_loc
 
 		import pdb; pdb.set_trace()
 
