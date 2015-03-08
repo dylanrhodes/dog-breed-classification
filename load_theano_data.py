@@ -155,11 +155,18 @@ def train_conv_network(X, y):
         ],
 
 	    regression=True,
-	    max_epochs=1000,
+	    max_epochs=5,
 	    verbose=1,
 	)
 
 	conv_net.fit(X, y)
+
+	with open('conv_net_full.pk', 'wb') as out_file:
+		pickle.dump(conv_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
+
+	with open('conv_net_other.pk', 'wb') as out_file:
+		pickle.dump(conv_net, out_file, protocol=-1)
+
 	return conv_net
 
 def plot_loss(network):
@@ -216,6 +223,8 @@ def plot_prediction(network, X, y, idx):
 train_list = get_training_list()
 test_list = get_testing_list()
 
+train_list = train_list[:1000]
+
 random.shuffle(train_list)
 random.shuffle(test_list)
 
@@ -225,7 +234,5 @@ X_test, y_test = load_data(test_list[:1000])
 conv_net = train_conv_network(X_train, y_train)
 
 print "MEAN SQUARED ERROR: {}".format(mean_squared_error(conv_net.predict(X_test), y_test))
-
-pickle.dump(conv_net, file('conv_net_dropout_full.pk', 'wb'), protocol=pickle.HIGHEST_PROTOCOL)
 
 pdb.set_trace()
