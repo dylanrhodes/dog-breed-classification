@@ -26,7 +26,7 @@ def crop_box(img, bounding_box, slope):
 	y_min = round((box_rotate[1,2] + box_rotate[1,3]) / 2 * scale + scale)
 	y_max = round((box_rotate[1,0] + box_rotate[1,1]) / 2 * scale + scale)
 
-	return imresize(img_rotate[y_min:y_max, x_min:x_max, :], (NUM_CHANNELS, CROP_SIZE, CROP_SIZE), interp='bicubic') * 255
+	return imresize(img_rotate[y_min:y_max, x_min:x_max, :], (CROP_SIZE, CROP_SIZE, NUM_CHANNELS), interp='bicubic') * 255
 
 def load_model(filename):
 	return pickle.load(open(filename, 'rb'))
