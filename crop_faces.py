@@ -27,10 +27,11 @@ def crop_box(img, bounding_box, slope):
 
 	try:
 		cropped_img = img_rotate[y_min:y_max, x_min:x_max, :]
+		resized_img = imresize(cropped_img, (CROP_SIZE, CROP_SIZE, NUM_CHANNELS), interp='bicubic')
 	except:
 		import pdb; pdb.set_trace()
 
-	return imresize(cropped_img, (CROP_SIZE, CROP_SIZE, NUM_CHANNELS), interp='bicubic')
+	return resized_img
 
 def load_model(filename):
 	return pickle.load(open(filename, 'rb'))
