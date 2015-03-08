@@ -11,7 +11,7 @@ FACE_DIR = './cropped_images/{}.png'
 CROP_SIZE = 64
 
 def crop_box(img, bounding_box, slope):
-	theta = np.atan2(slope[0], slope[1])
+	theta = np.arctan2(slope[0], slope[1])
 	theta_deg = theta * 180 / np.pi
 	rotation_mat = np.array([[np.cos(theta), -1 * np.sin(theta)], [np.sin(theta), np.cos(theta)]])
 
