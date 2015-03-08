@@ -22,8 +22,10 @@ def load_data(img_list):
 	for idx, dog_path in enumerate(img_list):
 		img = imread(IMAGE_PREFIX.format(dog_path))
 		orig_size = img.shape
-		img = imresize(img, (IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS))
-
+		try:
+			img = imresize(img, (IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS))
+		except:
+			import pdb; pdb.set_trace()
 		point_dict, point_arr = load_dog(dog_path)
 
 		X[idx,:,:,:] = img
