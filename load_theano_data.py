@@ -78,6 +78,7 @@ dense_net.fit(X_train, y_train)
 train_loss = np.array([i["train_loss"] for i in dense_net.train_history_])
 valid_loss = np.array([i["valid_loss"] for i in dense_net.train_history_])
 
+"""
 plt.plot(train_loss, linewidth=3, label="train")
 plt.plot(valid_loss, linewidth=3, label="valid")
 plt.grid()
@@ -86,6 +87,7 @@ plt.xlabel("epoch")
 plt.ylabel("loss")
 plt.yscale("log")
 plt.show()
+"""
 
 def plot_sample(x, y, axis):
     axis.imshow(x)
@@ -101,4 +103,4 @@ for i in range(16):
     ax = fig.add_subplot(4, 4, i + 1, xticks=[], yticks=[])
     plot_sample(X_test[i], y_pred[i], ax)
 
-pyplot.show()
+plt.show()
