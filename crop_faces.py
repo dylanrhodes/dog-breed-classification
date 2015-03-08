@@ -20,13 +20,12 @@ def crop_box(img, bounding_box, slope):
 	
 	box_rotate = rotation_mat.dot(bounding_box.T)
 
-	scale = IMAGE_SIZE / 2
-	x_min = round((box_rotate[0,0] + box_rotate[0,3]) / 2 * scale + scale)
-	x_max = round((box_rotate[0,1] + box_rotate[0,2]) / 2 * scale + scale)
-	y_min = round((box_rotate[1,2] + box_rotate[1,3]) / 2 * scale + scale)
-	y_max = round((box_rotate[1,0] + box_rotate[1,1]) / 2 * scale + scale)
+	x_min = round((box_rotate[0,0] + box_rotate[0,3]) / 2)
+	x_max = round((box_rotate[0,1] + box_rotate[0,2]) / 2)
+	y_min = round((box_rotate[1,2] + box_rotate[1,3]) / 2)
+	y_max = round((box_rotate[1,0] + box_rotate[1,1]) / 2)
 
-	return imresize(img_rotate[y_min:y_max, x_min:x_max, :], (CROP_SIZE, CROP_SIZE, NUM_CHANNELS), interp='bicubic') * 255
+	return imresize(img_rotate[y_min:y_max, x_min:x_max, :], (CROP_SIZE, CROP_SIZE, NUM_CHANNELS), interp='bicubic')
 
 def load_model(filename):
 	return pickle.load(open(filename, 'rb'))
@@ -39,10 +38,11 @@ def write_cropped_faces(file_list, X):
 	for i, dog_file in enumerate(file_list):
 		img = X[i].transpose((2,1,0))
 
+		scale = IMAGE_SIZE / 2
 		pred_points = {
-			'RIGHT_EYE': y_pred[i, 0, :],
-			'LEFT_EYE': y_pred[i, 1, :],
-			'NOSE': y_pred[i, 2, :],
+			'RIGHT_EYE': y_pred[i, 0, :] * scale + scale,
+			'LEFT_EYE': y_pred[i, 1, :] * scale + scale,
+			'NOSE': y_pred[i, 2, :] * scale + scale,
 		}
 
 		corners, slope, distance = get_face_box(pred_points)
