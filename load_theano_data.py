@@ -44,13 +44,11 @@ def load_data(img_list):
 		point_dict, point_arr = load_dog(dog_path)
 		point_arr = point_arr.astype(np.float64)
 
-		pdb.set_trace()
-
 		x_scale = IMAGE_SIZE * 1.0 / orig_size[1]
 		y_scale = IMAGE_SIZE * 1.0 / orig_size[0]
 
-		point_arr[0] = ((point_arr[0] * x_scale) - (IMAGE_SIZE / 2)) / (IMAGE_SIZE / 2)
-		point_arr[1] = ((point_arr[1] * y_scale) - (IMAGE_SIZE / 2)) / (IMAGE_SIZE / 2)
+		point_arr[:,0] = ((point_arr[:,0] * x_scale) - (IMAGE_SIZE / 2)) / (IMAGE_SIZE / 2)
+		point_arr[:,1] = ((point_arr[:,1] * y_scale) - (IMAGE_SIZE / 2)) / (IMAGE_SIZE / 2)
 		
 		point_arr = np.reshape(point_arr, (1, point_arr.shape[0] * point_arr.shape[1]))
 		y[idx,:] = point_arr.astype(np.float32)
@@ -99,7 +97,6 @@ class AugmentBatchIterator(BatchIterator):
 
 			# Swap left parts for right parts eg. LEFT EYE <-> RIGHT EYE
 			for idx_pair in PART_FLIP_IDXS:
-				pdb.set_trace()
 				tmp = yb[:, (2 * idx_pair[0]):(2 * idx_pair[0] + 1)]
 				yb[:, (2 * idx_pair[0]):(2 * idx_pair[0] + 1)] = yb[:, (2 * idx_pair[1]):(2 * idx_pair[1] + 1)]
 				yb[:, (2 * idx_pair[1]):(2 * idx_pair[1] + 1)] = tmp
