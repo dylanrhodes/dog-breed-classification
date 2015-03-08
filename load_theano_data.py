@@ -26,6 +26,8 @@ def load_data(img_list):
 	
 		try:
 			img = imresize(img, (IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS)) * 1.0 / 255
+			img = img.transpose((2, 1, 0))
+			import pdb; pdb.set_trace()
 			X[idx,:,:,:] = img.astype(np.float32)
 		except ValueError:
 			continue # Skip malformed files in dataset
@@ -102,5 +104,7 @@ fig.subplots_adjust(
 for i in range(16):
     ax = fig.add_subplot(4, 4, i + 1, xticks=[], yticks=[])
     plot_sample(X_test[i], y_pred[i], ax)
+
+import pdb; pdb.set_trace()
 
 plt.show()
