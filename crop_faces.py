@@ -25,8 +25,6 @@ def crop_box(img, bounding_box, slope):
 	y_min = round((box_rotate[1,0] + box_rotate[1,3]) / 2)
 	y_max = round((box_rotate[1,1] + box_rotate[1,2]) / 2)
 
-	import pdb; pdb.set_trace()
-
 	return imresize(img_rotate[y_min:y_max, x_min:x_max, :], (CROP_SIZE, CROP_SIZE, NUM_CHANNELS), interp='bicubic')
 
 def load_model(filename):
@@ -52,8 +50,6 @@ def write_cropped_faces(file_list, X):
 
 		crop_file = 'crop_' + str(int(dog_file[:3])) + '_' + dog_file.split('/')[1]
 		imsave(FACE_DIR.format(crop_file), cropped_img)
-
-		import pdb; pdb.set_trace()
 
 train_list = get_training_list()
 test_list = get_testing_list()
