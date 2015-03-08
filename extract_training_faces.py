@@ -116,7 +116,7 @@ def get_random_box(image, parts):
 
 def get_training_list():
 	train_images = []
-	with open('/root/CU_Dogs/training.txt', 'rb') as in_file:
+	with open('/home/ubuntu/dog-breed-classification/CU_Dogs/training.txt', 'rb') as in_file:
 		for line in in_file.readlines():
 			train_images.append(line.strip().replace('.jpg', ''))
 
@@ -125,7 +125,7 @@ def get_training_list():
 def get_testing_list():
 	test_images = []
 
-	with open('/root/CU_Dogs/testing.txt', 'rb') as in_file:
+	with open('/home/ubuntu/dog-breed-classification/CU_Dogs/testing.txt', 'rb') as in_file:
 		for line in in_file.readlines():
 			test_images.append(line.strip().replace('.jpg', ''))
 
