@@ -16,8 +16,8 @@ random.seed(13131313)
 def load_data(img_list):
 	print 'LOADING IMAGE DATA...'
 
-	X = np.zeros((len(img_list), IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS))
-	y = np.zeros((len(img_list), 2))
+	X = np.zeros((len(img_list), IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS), dtype=np.float32)
+	y = np.zeros((len(img_list), 2), dtype=np.float32)
 
 	for idx, dog_path in enumerate(img_list):
 		img = imread(IMAGE_PREFIX.format(dog_path))
