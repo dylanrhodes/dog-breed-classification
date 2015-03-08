@@ -79,23 +79,23 @@ class AugmentBatchIterator(BatchIterator):
 		Xb[flip_idx] = Xb[flip_idx, :, ::-1, :]
 
 		if yb is not None:
-            yb[flip_idx, 0] = yb[flip_idx, 0] * -1
+			yb[flip_idx, 0] = yb[flip_idx, 0] * -1
 
-        return Xb, yb
+		return Xb, yb
 
 class AdjustVariable(object):
-    def __init__(self, name, start=0.01, stop=0.0001):
-        self.name = name
-        self.start, self.stop = start, stop
-        self.ls = None
+	def __init__(self, name, start=0.01, stop=0.0001):
+		self.name = name
+		self.start, self.stop = start, stop
+		self.ls = None
 
-    def __call__(self, nn, train_history):
-        if self.ls is None:
-            self.ls = np.linspace(self.start, self.stop, nn.max_epochs)
+	def __call__(self, nn, train_history):
+		if self.ls is None:
+			self.ls = np.linspace(self.start, self.stop, nn.max_epochs)
 
-        epoch = train_history[-1]['epoch']
-        new_value = float32(self.ls[epoch - 1])
-        getattr(nn, self.name).set_value(new_value)
+		epoch = train_history[-1]['epoch']
+		new_value = float32(self.ls[epoch - 1])
+		getattr(nn, self.name).set_value(new_value)
 
 def train_conv_network(X, y):
 	conv_net = NeuralNet(
