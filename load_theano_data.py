@@ -205,6 +205,6 @@ conv_net = train_conv_network(X_train, y_train)
 
 print "MEAN SQUARED ERROR: {}".format(mean_squared_error(conv_net.predict(X_test), y_test))
 
-pickle.dump(conv_net, file('conv_net_dropout.pk', 'wb'), protocol=pickle.HIGHEST_PROTOCOL)
+pickle.dump(conv_net, file('conv_net_dropout_large.pk', 'wb'), protocol=pickle.HIGHEST_PROTOCOL)
 
 import pdb; pdb.set_trace()
