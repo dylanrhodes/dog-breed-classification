@@ -69,6 +69,33 @@ def train_dense_network(X, y):
 	dense_net.fit(X, y)
 	return dense_net
 
+class AugmentBatchIterator(BatchIterator):
+	def transform(self, Xb, yb):
+		Xb, yb = super(AugmentBatchIterator, self).transform(Xb, yb)
+
+		batch_size = Xb.shape[0]
+		flip_idx = np.random.choice(batch_size, batch_size / 2, replace=False)
+		Xb[flip_idx] = Xb[flip_idx, :, ::-1, :]
+
+		if yb is not None:
+            yb[flip_idx, 0] = yb[flip_idx, 0] * -1
+
+        return Xb, yb
+
+class AdjustVariable(object):
+    def __init__(self, name, start=0.01, stop=0.0001):
+        self.name = name
+        self.start, self.stop = start, stop
+        self.ls = None
+
+    def __call__(self, nn, train_history):
+        if self.ls is None:
+            self.ls = np.linspace(self.start, self.stop, nn.max_epochs)
+
+        epoch = train_history[-1]['epoch']
+        new_value = float32(self.ls[epoch - 1])
+        getattr(nn, self.name).set_value(new_value)
+
 def train_conv_network(X, y):
 	conv_net = NeuralNet(
 		layers=[
@@ -91,8 +118,15 @@ def train_conv_network(X, y):
 	    hidden4_num_units=500, hidden5_num_units=500,
 	    output_num_units=2, output_nonlinearity=None,
 
-	    update_learning_rate=0.01,
-	    update_momentum=0.9,
+	    batch_iterator_train=AugmentBatchIterator(batch_size=256)
+
+	    update_learning_rate=theano.shared(float32(0.03)),
+    	update_momentum=theano.shared(float32(0.9)),
+
+    	on_epoch_finished=[
+	        AdjustVariable('update_learning_rate', start=0.01, stop=0.0001),
+	        AdjustVariable('update_momentum', start=0.9, stop=0.999),
+        ],
 
 	    regression=True,
 	    max_epochs=100,
@@ -131,7 +165,6 @@ def plot_predictions(network, X, y):
 		plot_sample(X[i], y[i], y_pred[i], ax)
 
 	plt.show()
-
 
 train_list = get_training_list()
 test_list = get_testing_list()
