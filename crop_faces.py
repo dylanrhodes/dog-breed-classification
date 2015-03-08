@@ -12,7 +12,7 @@ CROP_SIZE = 64
 NUM_CHANNELS = 3
 
 def crop_box(img, bounding_box, slope):
-	theta = np.arctan2(slope[0], slope[1])
+	theta = np.arctan2(slope[0], slope[1]) + np.pi / 2
 	theta_deg = theta * 180 / np.pi
 	rotation_mat = np.array([[np.cos(theta), -1 * np.sin(theta)], [np.sin(theta), np.cos(theta)]])
 
