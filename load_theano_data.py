@@ -26,7 +26,7 @@ def load_data(img_list):
 		try:
 			img = imresize(img, (IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS))
 			X[idx,:,:,:] = img
-		except IndexError:
+		except ValueError:
 			continue # Skip malformed files in dataset
 
 		point_dict, point_arr = load_dog(dog_path)
