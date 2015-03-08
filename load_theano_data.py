@@ -122,8 +122,8 @@ def train_conv_network(X, y):
 
 	    batch_iterator_train=AugmentBatchIterator(batch_size=256),
 
-	    update_learning_rate=theano.shared(float32(0.03)),
-    	update_momentum=theano.shared(float32(0.9)),
+	    update_learning_rate=theano.shared(np.cast['float32'](0.03)),
+    	update_momentum=theano.shared(np.cast['float32'](0.9)),
 
     	on_epoch_finished=[
 	        AdjustVariable('update_learning_rate', start=0.01, stop=0.0001),
