@@ -20,10 +20,11 @@ def crop_box(img, bounding_box, slope):
 	
 	box_rotate = rotation_mat.dot(bounding_box.T)
 
-	x_min = round((box_rotate[0,0] + box_rotate[0,3]) / 2)
-	x_max = round((box_rotate[0,1] + box_rotate[0,2]) / 2)
-	y_min = round((box_rotate[1,2] + box_rotate[1,3]) / 2)
-	y_max = round((box_rotate[1,0] + box_rotate[1,1]) / 2)
+	scale = IMAGE_SIZE / 2
+	x_min = round((box_rotate[0,0] + box_rotate[0,3]) / 2 * scale + scale)
+	x_max = round((box_rotate[0,1] + box_rotate[0,2]) / 2 * scale + scale)
+	y_min = round((box_rotate[1,2] + box_rotate[1,3]) / 2 * scale + scale)
+	y_max = round((box_rotate[1,0] + box_rotate[1,1]) / 2 * scale + scale)
 
 	import pdb; pdb.set_trace()
 
