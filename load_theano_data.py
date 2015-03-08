@@ -144,7 +144,7 @@ def train_conv_network(X, y):
 	    hidden4_num_units=1000, dropout4_p=0.5, hidden5_num_units=1000,
 	    output_num_units=16, output_nonlinearity=None,
 
-	    batch_iterator_train=AugmentBatchIterator(batch_size=256),
+	    #batch_iterator_train=AugmentBatchIterator(batch_size=256),
 
 	    update_learning_rate=theano.shared(np.cast['float32'](0.03)),
     	update_momentum=theano.shared(np.cast['float32'](0.9)),
