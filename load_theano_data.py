@@ -3,6 +3,7 @@ from lasagne import layers
 from lasagne.updates import nesterov_momentum
 import matplotlib.pyplot as plt
 from nolearn.lasagne import NeuralNet, BatchIterator
+import pdb
 import random
 from scipy.misc import imread, imresize
 from sklearn.metrics import mean_squared_error
@@ -43,6 +44,8 @@ def load_data(img_list):
 		point_dict, point_arr = load_dog(dog_path)
 		point_arr = point_arr.astype(np.float64)
 
+		pdb.set_trace()
+
 		x_scale = IMAGE_SIZE * 1.0 / orig_size[1]
 		y_scale = IMAGE_SIZE * 1.0 / orig_size[0]
 
@@ -51,6 +54,8 @@ def load_data(img_list):
 		
 		point_arr = np.reshape(point_arr, (1, point_arr.shape[0] * point_arr.shape[1]))
 		y[idx,:] = point_arr.astype(np.float32)
+
+		pdb.set_trace()
 
 		if idx % 100 == 0: print '{} IMAGES LOADED...'.format(idx)
 
@@ -94,6 +99,7 @@ class AugmentBatchIterator(BatchIterator):
 
 			# Swap left parts for right parts eg. LEFT EYE <-> RIGHT EYE
 			for idx_pair in PART_FLIP_IDXS:
+				pdb.set_trace()
 				tmp = yb[:, (2 * idx_pair[0]):(2 * idx_pair[0] + 1)]
 				yb[:, (2 * idx_pair[0]):(2 * idx_pair[0] + 1)] = yb[:, (2 * idx_pair[1]):(2 * idx_pair[1] + 1)]
 				yb[:, (2 * idx_pair[1]):(2 * idx_pair[1] + 1)] = tmp
