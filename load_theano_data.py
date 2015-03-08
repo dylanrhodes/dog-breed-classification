@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from nolearn.lasagne import NeuralNet, BatchIterator
 import random
 from scipy.misc import imread, imresize
+from sklearn.metrics import mean_squared_error
 import theano
 
 from extract_training_faces import *
@@ -14,13 +15,19 @@ IMAGE_PREFIX = '/home/ubuntu/dog-breed-classification/CU_Dogs/dogImages/{}.jpg'
 IMAGE_SIZE = 128
 NUM_CHANNELS = 3
 
+PART_FLIP_IDXS = [
+	[0, 1],
+	[3, 7],
+	[4, 6],
+]
+
 random.seed(13131313)
 
 def load_data(img_list):
 	print 'LOADING IMAGE DATA...'
 
 	X = np.zeros((len(img_list), NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE), dtype=np.float32)
-	y = np.zeros((len(img_list), 2), dtype=np.float32)
+	y = np.zeros((len(img_list), 14), dtype=np.float32)
 
 	for idx, dog_path in enumerate(img_list):
 		img = imread(IMAGE_PREFIX.format(dog_path))
@@ -34,13 +41,16 @@ def load_data(img_list):
 			continue # Skip malformed files in dataset
 
 		point_dict, point_arr = load_dog(dog_path)
+		point_arr = point_arr.astype(np.float64)
 
 		x_scale = IMAGE_SIZE * 1.0 / orig_size[1]
 		y_scale = IMAGE_SIZE * 1.0 / orig_size[0]
 
-		x_loc = ((point_dict['NOSE'][0] * x_scale) - (IMAGE_SIZE / 2)) / (IMAGE_SIZE / 2)
-		y_loc = ((point_dict['NOSE'][1] * y_scale) - (IMAGE_SIZE / 2)) / (IMAGE_SIZE / 2)
-		y[idx,:] = np.array([x_loc, y_loc]).astype(np.float32)
+		point_arr[0] = ((point_arr[0] * x_scale) - (IMAGE_SIZE / 2)) / (IMAGE_SIZE / 2)
+		point_arr[1] = (point_arr[1] * y_scale) - (IMAGE_SIZE / 2)) / (IMAGE_SIZE / 2)
+		
+		point_arr = np.reshape(point_arr, (1, point_arr.shape[0] * point_arr.shape[1]))
+		y[idx,:] = point_arr.astype(np.float32)
 
 		if idx % 100 == 0: print '{} IMAGES LOADED...'.format(idx)
 
@@ -82,6 +92,12 @@ class AugmentBatchIterator(BatchIterator):
 		if yb is not None:
 			yb[flip_idx, 0] = yb[flip_idx, 0] * -1
 
+			# Swap left parts for right parts eg. LEFT EYE <-> RIGHT EYE
+			for idx_pair in PART_FLIP_IDXS:
+				tmp = yb[:, (2 * idx_pair[0]):(2 * idx_pair[0] + 1)]
+				yb[:, (2 * idx_pair[0]):(2 * idx_pair[0] + 1)] = yb[:, (2 * idx_pair[1]):(2 * idx_pair[1] + 1)]
+				yb[:, (2 * idx_pair[1]):(2 * idx_pair[1] + 1)] = tmp
+
 		return Xb, yb
 
 class AdjustVariable(object):
@@ -121,7 +137,7 @@ def train_conv_network(X, y):
 	    conv1_num_filters=32, conv1_filter_size=(3, 3), pool1_ds=(2, 2), dropout1_p=0.3,
 	    conv2_num_filters=64, conv2_filter_size=(2, 2), pool2_ds=(2, 2), dropout2_p=0.4,
 	    conv3_num_filters=128, conv3_filter_size=(2, 2), pool3_ds=(2, 2), dropout3_p=0.5,
-	    hidden4_num_units=500, dropout4_p=0.5, hidden5_num_units=500,
+	    hidden4_num_units=1000, dropout4_p=0.5, hidden5_num_units=1000,
 	    output_num_units=2, output_nonlinearity=None,
 
 	    batch_iterator_train=AugmentBatchIterator(batch_size=256),
@@ -158,20 +174,21 @@ def plot_loss(network):
 def plot_predictions(network, X, y):
 	y_pred = network.predict(X)
 
+	y = np.reshape(y, (len(y) / 2, 2))
+	y_pred = np.reshape(y_pred, (len(y_pred) / 2, 2))
+
 	fig = plt.figure(figsize=(6, 6))
 	fig.subplots_adjust(left=0, right=1, bottom=0, top=1, hspace=0.05, wspace=0.05)
 
-	def plot_sample(img, y, y_pred, axis):
+	for i in range(16):
 		scale = IMAGE_SIZE / 2
 
-		axis.imshow(img.transpose((2, 1, 0)))
-		axis.scatter(y[0] * scale + scale, y[1] * scale + scale, marker='x', color='g', s=10)
-		axis.scatter(y_pred[0] * scale + scale, y_pred[i] * scale + scale, marker='x', color='r', s=10)
-
-	for i in range(16):
 		ax = fig.add_subplot(4, 4, i + 1, xticks=[], yticks=[])
-		plot_sample(X[i], y[i], y_pred[i], ax)
-
+		ax.imshow(img.transpose((2, 1, 0)))
+		
+		ax.scatter(y[0, :] * scale + scale, y[1, :] * scale + scale, marker='x', color='g', s=10)
+		ax.scatter(y_pred[0, :] * scale + scale, y_pred[i, :] * scale + scale, marker='x', color='r', s=10)
+		
 	plt.show()
 
 train_list = get_training_list()
@@ -180,10 +197,12 @@ test_list = get_testing_list()
 random.shuffle(train_list)
 random.shuffle(test_list)
 
-X_train, y_train = load_data(train_list)
-X_test, y_test = load_data(test_list[:100])
+X_train, y_train = load_data(train_list + test_list[1000:])
+X_test, y_test = load_data(test_list[:1000])
 
 conv_net = train_conv_network(X_train, y_train)
+
+print "MEAN SQUARED ERROR: {}".format(mean_squared_error(conv_net.predict(X_test), y_test))
 
 pickle.dump(conv_net, file('conv_net_dropout.pk', 'wb'), protocol=pickle.HIGHEST_PROTOCOL)
 
