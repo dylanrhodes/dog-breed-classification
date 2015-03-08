@@ -14,13 +14,15 @@ NUM_CHANNELS = 3
 random.seed(13131313)
 
 def load_data(img_list):
+	print 'LOADING IMAGE DATA...'
+
 	X = np.zeros((len(img_list), IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS))
 	y = np.zeros((len(img_list), 2))
 
 	for idx, dog_path in enumerate(img_list):
 		img = imread(IMAGE_PREFIX.format(dog_path))
 		orig_size = img.shape
-		img = imresize(img, (IMAGE_SIZE, IMAGE_SIZE))
+		img = imresize(img, (IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS))
 
 		point_dict, point_arr = load_dog(dog_path)
 
@@ -32,27 +34,28 @@ def load_data(img_list):
 		scaled_loc = np.array([point_dict['NOSE'][0] * x_scale], point_dict['NOSE'][1] * y_scale)
 		y[idx,:] = scaled_loc
 
+		if idx % 100 == 0: print '{} IMAGES LOADED...'.format(idx)
+
 	return X, y
 
 dense_net = NeuralNet(
-    layers=[  # three layers: one hidden layer
+    layers=[
         ('input', layers.InputLayer),
         ('hidden', layers.DenseLayer),
         ('output', layers.DenseLayer),
-        ],
-    # layer parameters:
-    input_shape=(None, IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS),  # 96x96 input pixels per batch
+    ],
+    
+    input_shape=(None, IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS),
     hidden_num_units=100,  
-    output_nonlinearity=None,  # output layer uses identity function
-    output_num_units=30,  # 30 target values
+    output_nonlinearity=None,
+    output_num_units=2,
 
-    # optimization method:
     update=nesterov_momentum,
     update_learning_rate=0.01,
     update_momentum=0.9,
 
-    regression=True,  # flag to indicate we're dealing with regression problem
-    max_epochs=50,  # we want to train this many epochs
+    regression=True,
+    max_epochs=50,
     verbose=1,
     )
 
