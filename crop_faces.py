@@ -25,6 +25,8 @@ def crop_box(img, bounding_box, slope):
 	y_min = round((box_rotate[1,2] + box_rotate[1,3]) / 2)
 	y_max = round((box_rotate[1,0] + box_rotate[1,1]) / 2)
 
+	import pdb; pdb.set_trace()
+
 	return imresize(img_rotate[y_min:y_max, x_min:x_max, :], (CROP_SIZE, CROP_SIZE, NUM_CHANNELS), interp='bicubic')
 
 def load_model(filename):
