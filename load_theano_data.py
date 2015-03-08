@@ -91,7 +91,9 @@ class AugmentBatchIterator(BatchIterator):
 		Xb[flip_idx] = Xb[flip_idx, :, ::-1, :]
 
 		if yb is not None:
-			x_cols = np.array([i for i in xrange(len(yb[0])) if i % 2 == 0])
+			x_cols = np.array([i for i in xrange(yb.shape[1]) if i % 2 == 0])
+			x_cols = np.reshape(x_cols, (1, x_cols.shape[0]))
+
 			yb[flip_idx, x_cols] = yb[flip_idx, x_cols] * -1
 
 			# Swap left parts for right parts eg. LEFT EYE <-> RIGHT EYE
@@ -142,7 +144,7 @@ def train_conv_network(X, y):
 	    hidden4_num_units=1000, dropout4_p=0.5, hidden5_num_units=1000,
 	    output_num_units=16, output_nonlinearity=None,
 
-	    #batch_iterator_train=AugmentBatchIterator(batch_size=256),
+	    batch_iterator_train=AugmentBatchIterator(batch_size=256),
 
 	    update_learning_rate=theano.shared(np.cast['float32'](0.03)),
     	update_momentum=theano.shared(np.cast['float32'](0.9)),
@@ -153,7 +155,7 @@ def train_conv_network(X, y):
         ],
 
 	    regression=True,
-	    max_epochs=100,
+	    max_epochs=1000,
 	    verbose=1,
 	)
 
