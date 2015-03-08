@@ -138,10 +138,10 @@ def train_conv_network(X, y):
 		],
 
 		input_shape=(None, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE),
-	    conv1_num_filters=32, conv1_filter_size=(3, 3), pool1_ds=(2, 2), dropout1_p=0.3,
-	    conv2_num_filters=64, conv2_filter_size=(2, 2), pool2_ds=(2, 2), dropout2_p=0.4,
-	    conv3_num_filters=128, conv3_filter_size=(2, 2), pool3_ds=(2, 2), dropout3_p=0.5,
-	    hidden4_num_units=1000, dropout4_p=0.5, hidden5_num_units=1000,
+	    conv1_num_filters=32, conv1_filter_size=(3, 3), pool1_ds=(2, 2), dropout1_p=0.5,
+	    conv2_num_filters=64, conv2_filter_size=(2, 2), pool2_ds=(2, 2), dropout2_p=0.6,
+	    conv3_num_filters=128, conv3_filter_size=(2, 2), pool3_ds=(2, 2), dropout3_p=0.7,
+	    hidden4_num_units=1000, dropout4_p=0.7, hidden5_num_units=1000,
 	    output_num_units=16, output_nonlinearity=None,
 
 	    #batch_iterator_train=AugmentBatchIterator(batch_size=256),
@@ -178,21 +178,39 @@ def plot_loss(network):
 def plot_predictions(network, X, y):
 	y_pred = network.predict(X)
 
-	y = np.reshape(y, (len(y) / 2, 2))
-	y_pred = np.reshape(y_pred, (len(y_pred) / 2, 2))
+	y = np.reshape(y, (y.shape[0], y.shape[1] / 2, 2))
+	y_pred = np.reshape(y_pred, (y_pred.shape[0], y_pred.shape[1] / 2, 2))
 
 	fig = plt.figure(figsize=(6, 6))
 	fig.subplots_adjust(left=0, right=1, bottom=0, top=1, hspace=0.05, wspace=0.05)
 
-	for i in range(16):
+	for i, idx in enumerate(np.random.choice(y.shape[0], 16, replace=False)):
 		scale = IMAGE_SIZE / 2
+		img = X[idx].transpose((2, 1, 0))
 
 		ax = fig.add_subplot(4, 4, i + 1, xticks=[], yticks=[])
-		ax.imshow(img.transpose((2, 1, 0)))
+		ax.imshow(img)
 		
-		ax.scatter(y[0, :] * scale + scale, y[1, :] * scale + scale, marker='x', color='g', s=10)
-		ax.scatter(y_pred[0, :] * scale + scale, y_pred[i, :] * scale + scale, marker='x', color='r', s=10)
+		ax.scatter(y[idx, :, 0] * scale + scale, y[idx, :, 1] * scale + scale, marker='x', color='g', s=10)
+		ax.scatter(y_pred[idx, :, 0] * scale + scale, y_pred[idx, :, 1] * scale + scale, marker='x', color='r', s=10)
 		
+	plt.show()
+
+def plot_prediction(network, X, y, idx):
+	img = X[img].transpose((2,1,0))
+
+	scale = IMAGE_SIZE / 2
+
+	y_pred = network.predict(X)
+	y_pred = y_pred[idx] * scale + scale
+	y_pred = np.reshape(y_pred, (2, len(y_pred) / 2))
+
+	y_test = y[idx] * scale + scale
+	y_test = np.reshape(y_test, (2, len(y_test) / 2))
+
+	plt.imshow(img)
+	plt.plot(y_pred, 'rx')
+	plt.plot(y_test, 'go')
 	plt.show()
 
 train_list = get_training_list()
@@ -208,6 +226,6 @@ conv_net = train_conv_network(X_train, y_train)
 
 print "MEAN SQUARED ERROR: {}".format(mean_squared_error(conv_net.predict(X_test), y_test))
 
-pickle.dump(conv_net, file('conv_net_dropout_large.pk', 'wb'), protocol=pickle.HIGHEST_PROTOCOL)
+pickle.dump(conv_net, file('conv_net_dropout_full.pk', 'wb'), protocol=pickle.HIGHEST_PROTOCOL)
 
 pdb.set_trace()
