@@ -40,6 +40,7 @@ def load_data(img_list):
 
 		if idx % 100 == 0: print '{} IMAGES LOADED...'.format(idx)
 
+	import pdb; pdb.set_trace()
 	return X, y
 
 dense_net = NeuralNet(
