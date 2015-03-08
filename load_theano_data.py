@@ -92,9 +92,9 @@ class AugmentBatchIterator(BatchIterator):
 
 		if yb is not None:
 			x_cols = np.array([i for i in xrange(yb.shape[1]) if i % 2 == 0])
-			x_cols = np.reshape(x_cols, (1, x_cols.shape[0]))
+			x_cols = np.tile(x_cols, len(flip_idx))
 
-			yb[flip_idx, x_cols] = yb[flip_idx, x_cols] * -1
+			yb[np.repeat(flip_idx, len(x_cols)), x_cols] = yb[np.repeat(flip_idx, len(x_cols)), x_cols] * -1
 
 			# Swap left parts for right parts eg. LEFT EYE <-> RIGHT EYE
 			for idx_pair in PART_FLIP_IDXS:
