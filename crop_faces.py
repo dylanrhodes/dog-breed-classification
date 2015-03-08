@@ -17,7 +17,7 @@ def crop_box(img, bounding_box, slope):
 
 	img_rotate = imrotate(img, theta_deg, interp='bicubic')
 	
-	box_rotate = rotation_mat * bounding_box.T
+	box_rotate = rotation_mat.dot(bounding_box.T)
 	import pdb; pdb.set_trace()	
 
 	return img_rotate[:, :50, :50]
@@ -47,6 +47,9 @@ def write_cropped_faces(file_list, X):
 
 train_list = get_training_list()
 test_list = get_testing_list()
+
+train_list = train_list[:1000]
+test_list = test_list[:1500]
 
 X_train, y_train = load_data(train_list + test_list[1000:])
 X_test, y_test = load_data(test_list[:1000])
