@@ -27,7 +27,6 @@ def load_data(img_list):
 		try:
 			img = imresize(img, (IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS)) * 1.0 / 255
 			img = img.transpose((2, 1, 0))
-			import pdb; pdb.set_trace()
 			X[idx,:,:,:] = img.astype(np.float32)
 		except ValueError:
 			continue # Skip malformed files in dataset
@@ -45,26 +44,94 @@ def load_data(img_list):
 
 	return X, y
 
-dense_net = NeuralNet(
-    layers=[
-        ('input', layers.InputLayer),
-        ('hidden', layers.DenseLayer),
-        ('output', layers.DenseLayer),
-    ],
-    
-    input_shape=(None, IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS),
-    hidden_num_units=100,  
-    output_nonlinearity=None,
-    output_num_units=2,
+def train_dense_network(X, y):
+	dense_net = NeuralNet(
+	    layers=[
+	        ('input', layers.InputLayer),
+	        ('hidden', layers.DenseLayer),
+	        ('output', layers.DenseLayer),
+	    ],
+	    
+	    input_shape=(None, IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS),
+	    hidden_num_units=100,  
+	    output_nonlinearity=None,
+	    output_num_units=2,
 
-    update=nesterov_momentum,
-    update_learning_rate=0.01,
-    update_momentum=0.9,
+	    update=nesterov_momentum,
+	    update_learning_rate=0.01,
+	    update_momentum=0.9,
 
-    regression=True,
-    max_epochs=50,
-    verbose=1,
-    )
+	    regression=True,
+	    max_epochs=50,
+	    verbose=1,
+	)
+
+	dense_net.fit(X, y)
+	return dense_net
+
+def train_conv_network(X, y):
+	conv_net = NeuralNet(
+		layers=[
+			('input', layers.InputLayer),
+			('conv1', layers.Conv2DLayer),
+			('pool1', layers.MaxPool2DLayer),
+        	('conv2', layers.Conv2DLayer),
+	        ('pool2', layers.MaxPool2DLayer),
+	        ('conv3', layers.Conv2DLayer),
+	        ('pool3', layers.MaxPool2DLayer),
+	        ('hidden4', layers.DenseLayer),
+	        ('hidden5', layers.DenseLayer),
+	        ('output', layers.DenseLayer),
+		]
+
+		input_shape=(None, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE),
+	    conv1_num_filters=32, conv1_filter_size=(3, 3), pool1_ds=(2, 2),
+	    conv2_num_filters=64, conv2_filter_size=(2, 2), pool2_ds=(2, 2),
+	    conv3_num_filters=128, conv3_filter_size=(2, 2), pool3_ds=(2, 2),
+	    hidden4_num_units=500, hidden5_num_units=500,
+	    output_num_units=2, output_nonlinearity=None,
+
+	    update_learning_rate=0.01,
+	    update_momentum=0.9,
+
+	    regression=True,
+	    max_epochs=100,
+	    verbose=1,
+	)
+
+	conv_net.fit(X, y)
+	return conv_net
+
+def plot_loss(network):
+	train_loss = np.array([i["train_loss"] for i in network.train_history_])
+	valid_loss = np.array([i["valid_loss"] for i in network.train_history_])
+
+	plt.plot(train_loss, linewidth=3, label="train")
+	plt.plot(valid_loss, linewidth=3, label="valid")
+	plt.grid()
+	plt.legend()
+	plt.xlabel("epoch")
+	plt.ylabel("loss")
+	plt.yscale("log")
+	plt.show()
+
+def plot_predictions(network, X, y):
+	y_pred = network.predict(X)
+
+	fig = plt.figure(figsize=(6, 6))
+	fig.subplots_adjust(left=0, right=1, bottom=0, top=1, hspace=0.05, wspace=0.05)
+
+	def plot_sample(img, y, y_pred, axis):
+	    axis.imshow(img)
+	    axis.scatter(y[0] * 64 + 64, y[1] * 64 + 64, marker='x', color='g', s=10)
+	    axis.scatter(y_pred[0] * 64 + 64, y_pred[i] * 64 + 64, marker='x', color='r', s=10)
+
+	for i in range(16):
+    	ax = fig.add_subplot(4, 4, i + 1, xticks=[], yticks=[])
+    	plot_sample(X[i], y[i], y_pred[i], ax)
+
+	plt.show()
+
 
 train_list = get_training_list()
 test_list = get_testing_list()
@@ -75,36 +142,6 @@ random.shuffle(test_list)
 X_train, y_train = load_data(train_list)
 X_test, y_test = load_data(test_list[:100])
 
-dense_net.fit(X_train, y_train)
-
-train_loss = np.array([i["train_loss"] for i in dense_net.train_history_])
-valid_loss = np.array([i["valid_loss"] for i in dense_net.train_history_])
-
-"""
-plt.plot(train_loss, linewidth=3, label="train")
-plt.plot(valid_loss, linewidth=3, label="valid")
-plt.grid()
-plt.legend()
-plt.xlabel("epoch")
-plt.ylabel("loss")
-plt.yscale("log")
-plt.show()
-"""
-
-def plot_sample(x, y, axis):
-    axis.imshow(x)
-    axis.scatter(y[0] * 64 + 64, y[1] * 64 + 64, marker='x', s=10)
-
-y_pred = dense_net.predict(X_test)
-
-fig = plt.figure(figsize=(6, 6))
-fig.subplots_adjust(
-    left=0, right=1, bottom=0, top=1, hspace=0.05, wspace=0.05)
-
-for i in range(16):
-    ax = fig.add_subplot(4, 4, i + 1, xticks=[], yticks=[])
-    plot_sample(X_test[i], y_pred[i], ax)
+conv_net = train_conv_network(X_train, y_train)
 
 import pdb; pdb.set_trace()
-
-plt.show()
