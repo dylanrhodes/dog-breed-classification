@@ -27,7 +27,7 @@ def load_data(img_list):
 	print 'LOADING IMAGE DATA...'
 
 	X = np.zeros((len(img_list), NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE), dtype=np.float32)
-	y = np.zeros((len(img_list), 14), dtype=np.float32)
+	y = np.zeros((len(img_list), 16), dtype=np.float32)
 
 	for idx, dog_path in enumerate(img_list):
 		img = imread(IMAGE_PREFIX.format(dog_path))
@@ -47,7 +47,7 @@ def load_data(img_list):
 		y_scale = IMAGE_SIZE * 1.0 / orig_size[0]
 
 		point_arr[0] = ((point_arr[0] * x_scale) - (IMAGE_SIZE / 2)) / (IMAGE_SIZE / 2)
-		point_arr[1] = (point_arr[1] * y_scale) - (IMAGE_SIZE / 2)) / (IMAGE_SIZE / 2)
+		point_arr[1] = ((point_arr[1] * y_scale) - (IMAGE_SIZE / 2)) / (IMAGE_SIZE / 2)
 		
 		point_arr = np.reshape(point_arr, (1, point_arr.shape[0] * point_arr.shape[1]))
 		y[idx,:] = point_arr.astype(np.float32)
@@ -67,7 +67,7 @@ def train_dense_network(X, y):
 	    input_shape=(None, IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS),
 	    hidden_num_units=100,  
 	    output_nonlinearity=None,
-	    output_num_units=2,
+	    output_num_units=16,
 
 	    update=nesterov_momentum,
 	    update_learning_rate=0.01,
@@ -138,7 +138,7 @@ def train_conv_network(X, y):
 	    conv2_num_filters=64, conv2_filter_size=(2, 2), pool2_ds=(2, 2), dropout2_p=0.4,
 	    conv3_num_filters=128, conv3_filter_size=(2, 2), pool3_ds=(2, 2), dropout3_p=0.5,
 	    hidden4_num_units=1000, dropout4_p=0.5, hidden5_num_units=1000,
-	    output_num_units=2, output_nonlinearity=None,
+	    output_num_units=16, output_nonlinearity=None,
 
 	    batch_iterator_train=AugmentBatchIterator(batch_size=256),
 
