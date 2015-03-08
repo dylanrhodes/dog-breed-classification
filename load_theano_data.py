@@ -24,8 +24,8 @@ def load_data(img_list):
 		orig_size = img.shape
 	
 		try:
-			img = imresize(img, (IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS))
-			X[idx,:,:,:] = img
+			img = imresize(img, (IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS)) * 1.0 / 255
+			X[idx,:,:,:] = img.astype(np.float32)
 		except ValueError:
 			continue # Skip malformed files in dataset
 
@@ -34,8 +34,9 @@ def load_data(img_list):
 		x_scale = IMAGE_SIZE * 1.0 / orig_size[1]
 		y_scale = IMAGE_SIZE * 1.0 / orig_size[0]
 
-		scaled_loc = np.array([point_dict['NOSE'][0] * x_scale], point_dict['NOSE'][1] * y_scale)
-		y[idx,:] = scaled_loc
+		x_loc = ((point_dict['NOSE'][0] * x_scale) - (IMAGE_SIZE / 2)) / (IMAGE_SIZE / 2)
+		y_loc = ((point_dict['NOSE'][1] * y_scale) - (IMAGE_SIZE / 2)) / (IMAGE_SIZE / 2)
+		y[idx,:] = np.array([x_loc, y_loc]).astype(np.float32)
 
 		if idx % 100 == 0: print '{} IMAGES LOADED...'.format(idx)
 
