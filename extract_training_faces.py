@@ -8,8 +8,8 @@ from scipy import misc
 from sklearn import svm
 from sklearn.metrics import confusion_matrix
 
-IMAGE_PREFIX = '../CU_Dogs/dogImages/{}.jpg'
-POINT_PREFIX = '../CU_Dogs/dogParts/{}.txt'
+IMAGE_PREFIX = 'CU_Dogs/dogImages/{}.jpg'
+POINT_PREFIX = 'CU_Dogs/dogParts/{}.txt'
 
 PART_FILE_KEY = [
 	('RIGHT_EYE', 0),
