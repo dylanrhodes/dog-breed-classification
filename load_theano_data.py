@@ -82,7 +82,7 @@ def train_conv_network(X, y):
 	        ('hidden4', layers.DenseLayer),
 	        ('hidden5', layers.DenseLayer),
 	        ('output', layers.DenseLayer),
-		]
+		],
 
 		input_shape=(None, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE),
 	    conv1_num_filters=32, conv1_filter_size=(3, 3), pool1_ds=(2, 2),
