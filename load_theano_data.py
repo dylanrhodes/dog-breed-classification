@@ -2,7 +2,7 @@ import cPickle as pickle
 from lasagne import layers
 from lasagne.updates import nesterov_momentum
 import matplotlib.pyplot as plt
-from nolearn.lasagne import NeuralNet
+from nolearn.lasagne import NeuralNet, BatchIterator
 import random
 from scipy.misc import imread, imresize
 
