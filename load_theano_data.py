@@ -8,7 +8,7 @@ from extract_training_faces import *
 
 IMAGE_PREFIX = '/home/ubuntu/dog-breed-classification/CU_Dogs/dogImages/{}.jpg'
 
-IMAGE_SIZE = 256
+IMAGE_SIZE = 128
 NUM_CHANNELS = 3
 
 random.seed(13131313)
@@ -66,7 +66,7 @@ train_list = get_training_list()
 test_list = get_testing_list()
 
 X_train, y_train = load_data(train_list)
-X_test, y_test = load_data(test_list)
+#X_test, y_test = load_data(test_list)
 
 dense_net.fit(X_train, y_train)
 
