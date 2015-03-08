@@ -12,7 +12,7 @@ CROP_SIZE = 64
 NUM_CHANNELS = 3
 
 def crop_box(img, bounding_box, slope):
-	theta = np.arctan2(slope[0], slope[1]) + np.pi / 2
+	theta = -1 * (np.arctan2(slope[0], slope[1]) + np.pi / 2)
 	theta_deg = theta * 180 / np.pi
 	rotation_mat = np.array([[np.cos(theta), -1 * np.sin(theta)], [np.sin(theta), np.cos(theta)]])
 
@@ -20,10 +20,10 @@ def crop_box(img, bounding_box, slope):
 	
 	box_rotate = rotation_mat.dot(bounding_box.T)
 
-	x_min = round((box_rotate[0,0] + box_rotate[0,3]) / 2)
-	x_max = round((box_rotate[0,1] + box_rotate[0,2]) / 2)
-	y_min = round((box_rotate[1,2] + box_rotate[1,3]) / 2)
-	y_max = round((box_rotate[1,0] + box_rotate[1,1]) / 2)
+	x_min = round((box_rotate[0,0] + box_rotate[0,1]) / 2)
+	x_max = round((box_rotate[0,2] + box_rotate[0,3]) / 2)
+	y_min = round((box_rotate[1,0] + box_rotate[1,3]) / 2)
+	y_max = round((box_rotate[1,1] + box_rotate[1,2]) / 2)
 
 	import pdb; pdb.set_trace()
 
