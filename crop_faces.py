@@ -26,9 +26,7 @@ def crop_box(img, bounding_box, slope):
 	y_min = round((box_rotate[1,2] + box_rotate[1,3]) / 2 * scale + scale)
 	y_max = round((box_rotate[1,0] + box_rotate[1,1]) / 2 * scale + scale)
 
-	import pdb; pdb.set_trace()
-
-	return imresize(img_rotate[y_min:y_max, x_min:x_max, :], (NUM_CHANNELS, CROP_SIZE, CROP_SIZE)) * 255
+	return imresize(img_rotate[y_min:y_max, x_min:x_max, :], (NUM_CHANNELS, CROP_SIZE, CROP_SIZE), interp='bicubic') * 255
 
 def load_model(filename):
 	return pickle.load(open(filename, 'rb'))
@@ -51,7 +49,9 @@ def write_cropped_faces(file_list, X):
 		cropped_img = crop_box(img, corners, slope)
 
 		crop_file = 'crop_' + str(int(dog_file[:3])) + '_' + dog_file.split('/')[1]
-		imwrite(FACE_DIR.format(crop_file), cropped_img)
+		imsave(FACE_DIR.format(crop_file), cropped_img)
+
+		import pdb; pdb.set_trace()
 
 train_list = get_training_list()
 test_list = get_testing_list()
