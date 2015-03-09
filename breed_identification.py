@@ -84,13 +84,38 @@ def train_conv_network(X, y):
 
 	return conv_net
 
+def train_dense_network(X, y):
+	dense_net = NeuralNet(
+	    layers=[
+	        ('input', layers.InputLayer),
+	        ('hidden', layers.DenseLayer),
+	        ('output', layers.DenseLayer),
+	    ],
+	    
+	    input_shape=(None, IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS),
+	    hidden_num_units=100,  
+	    output_nonlinearity=None,
+	    output_num_units=16,
+
+	    update=nesterov_momentum,
+	    update_learning_rate=0.01,
+	    update_momentum=0.9,
+
+	    regression=True,
+	    max_epochs=50,
+	    verbose=1,
+	)
+
+	dense_net.fit(X, y)
+	return dense_net
+
 train_list = [TRAIN_SET_DIR + file_name for file_name in listdir(TRAIN_SET_DIR)]
 test_list = [TEST_SET_DIR + file_name for file_name in listdir(TEST_SET_DIR)]
 
 X_train, y_train = load_data(train_list)
 X_test, y_test = load_data(test_list)
 
-breed_net = train_conv_network(X_train, y_train)
+breed_net = train_dense_network(X_train, y_train)
 
 y_pred = breed_net.predict(X_test)
 accuracy = np.mean(y_pred == y_test)
