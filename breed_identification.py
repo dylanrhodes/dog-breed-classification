@@ -95,13 +95,13 @@ def train_dense_network(X, y):
 	    input_shape=(None, IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS),
 	    hidden_num_units=100,  
 	    output_nonlinearity=None,
-	    output_num_units=16,
+	    output_num_units=1,
 
 	    update=nesterov_momentum,
 	    update_learning_rate=0.01,
 	    update_momentum=0.9,
 
-	    regression=True,
+	    regression=False,
 	    max_epochs=50,
 	    verbose=1,
 	)
