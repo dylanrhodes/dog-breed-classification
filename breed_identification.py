@@ -15,6 +15,7 @@ TRAIN_SET_DIR = './cropped_images/train_set/'
 TEST_SET_DIR = './cropped_images/test_set/'
 
 IMAGE_SIZE = 64
+NUM_CHANNELS = 3
 
 random.seed(13131313)
 
