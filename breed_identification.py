@@ -52,6 +52,7 @@ def train_conv_network(X, y):
 		layers=[
 			('input', layers.InputLayer),
 			('conv1', layers.Conv2DLayer),
+			('conv1b', layers.Conv2DLayer),
 			('pool1', layers.MaxPool2DLayer),
 			('dropout1', layers.DropoutLayer),
         	('conv2', layers.Conv2DLayer),
@@ -90,7 +91,7 @@ def train_conv_network(X, y):
 
 	conv_net.fit(X, y)
 
-	with open('breed_net_exp_long.pk', 'wb') as out_file:
+	with open('dense_breed.pk', 'wb') as out_file:
 		pickle.dump(conv_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 	return conv_net
@@ -113,7 +114,7 @@ def train_dense_network(X, y):
 	    update_momentum=0.9,
 
 	    regression=False,
-	    max_epochs=50,
+	    max_epochs=100,
 	    verbose=1,
 	)
 
@@ -129,7 +130,7 @@ random.shuffle(test_list)
 X_train, y_train = load_data(train_list)
 X_test, y_test = load_data(test_list)
 
-breed_net = train_conv_network(X_train, y_train)
+breed_net = train_dense_network(X_train, y_train)
 
 y_pred = breed_net.predict(X_test)
 accuracy = np.mean(y_pred == y_test)
