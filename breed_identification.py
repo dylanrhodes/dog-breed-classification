@@ -23,7 +23,7 @@ def load_data(img_list):
 	print 'LOADING IMAGE DATA...'
 
 	X = np.zeros((len(img_list), NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE), dtype=np.float32)
-	y = np.zeros((len(img_list)), dtype=np.int8)
+	y = np.zeros((len(img_list)), dtype=np.int32)
 
 	for idx, dog_path in enumerate(img_list):
 		img = imread(dog_path)
