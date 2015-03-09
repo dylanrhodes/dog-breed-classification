@@ -69,7 +69,7 @@ def train_conv_network(X, y):
     	update_momentum=theano.shared(np.cast['float32'](0.9)),
 
     	on_epoch_finished=[
-	        AdjustVariable('update_learning_rate', start=0.01, stop=0.0001),
+	        AdjustVariable('update_learning_rate', start=0.1, stop=0.0001),
 	        AdjustVariable('update_momentum', start=0.9, stop=0.999),
         ],
 
