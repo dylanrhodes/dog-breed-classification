@@ -53,7 +53,6 @@ def train_conv_network(X, y):
 			('input', layers.InputLayer),
 			('conv1a', layers.Conv2DLayer),
 			('conv1', layers.Conv2DLayer),
-			('conv1b', layers.Conv2DLayer),
 			('pool1', layers.MaxPool2DLayer),
 			('dropout1', layers.DropoutLayer),
         	('conv2', layers.Conv2DLayer),
