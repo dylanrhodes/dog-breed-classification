@@ -51,6 +51,7 @@ def train_conv_network(X, y):
 	conv_net = NeuralNet(
 		layers=[
 			('input', layers.InputLayer),
+			('conv1a' layers.Conv2DLayer),
 			('conv1', layers.Conv2DLayer),
 			('conv1b', layers.Conv2DLayer),
 			('pool1', layers.MaxPool2DLayer),
@@ -68,8 +69,9 @@ def train_conv_network(X, y):
 		],
 
 		input_shape=(None, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE),
-	    conv1_num_filters=32, conv1_filter_size=(3, 3), pool1_ds=(2, 2), dropout1_p=0.2,
-	    conv2_num_filters=64, conv2_filter_size=(3, 3), pool2_ds=(2, 2), dropout2_p=0.3,
+		conv1a_num_filters=32, conv1a_filter_size=(3, 3), 
+	    conv1_num_filters=64, conv1_filter_size=(3, 3), pool1_ds=(2, 2), dropout1_p=0.2,
+	    conv2_num_filters=128, conv2_filter_size=(3, 3), pool2_ds=(2, 2), dropout2_p=0.3,
 	    conv3_num_filters=128, conv3_filter_size=(2, 2), pool3_ds=(2, 2), dropout3_p=0.4,
 	    hidden4_num_units=1600, dropout4_p=0.75, hidden5_num_units=1000,
 	    output_num_units=133, output_nonlinearity=softmax,
@@ -130,7 +132,7 @@ random.shuffle(test_list)
 X_train, y_train = load_data(train_list)
 X_test, y_test = load_data(test_list)
 
-breed_net = train_dense_network(X_train, y_train)
+breed_net = train_conv_network(X_train, y_train)
 
 y_pred = breed_net.predict(X_test)
 accuracy = np.mean(y_pred == y_test)
