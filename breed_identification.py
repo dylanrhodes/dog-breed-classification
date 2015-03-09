@@ -28,6 +28,7 @@ def load_data(img_list):
 	for idx, dog_path in enumerate(img_list):
 		img = imread(dog_path)
 		img = img.transpose((2, 1, 0)) * 1.0 / 255
+		pdb.set_trace()
 
 		X[idx,:,:,:] = img.astype(np.float32)
 		y[idx] = np.array([int(dog_path.split('_')[3])])
