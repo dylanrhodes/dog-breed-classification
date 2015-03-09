@@ -57,10 +57,10 @@ def train_conv_network(X, y):
 		],
 
 		input_shape=(None, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE),
-	    conv1_num_filters=32, conv1_filter_size=(3, 3), pool1_ds=(2, 2), dropout1_p=0.5,
-	    conv2_num_filters=64, conv2_filter_size=(2, 2), pool2_ds=(2, 2), dropout2_p=0.6,
-	    conv3_num_filters=128, conv3_filter_size=(2, 2), pool3_ds=(2, 2), dropout3_p=0.7,
-	    hidden4_num_units=1000, dropout4_p=0.7, hidden5_num_units=1000,
+	    conv1_num_filters=64, conv1_filter_size=(3, 3), pool1_ds=(2, 2), dropout1_p=0.5,
+	    conv2_num_filters=128, conv2_filter_size=(3, 3), pool2_ds=(2, 2), dropout2_p=0.7,
+	    conv3_num_filters=256, conv3_filter_size=(3, 3), pool3_ds=(2, 2), dropout3_p=0.8,
+	    hidden4_num_units=4096, dropout4_p=0.95, hidden5_num_units=1000,
 	    output_num_units=133, output_nonlinearity=softmax,
 
 	    #batch_iterator_train=AugmentBatchIterator(batch_size=256),
@@ -74,13 +74,13 @@ def train_conv_network(X, y):
         ],
 
 	    regression=False,
-	    max_epochs=1000,
+	    max_epochs=100,
 	    verbose=1,
 	)
 
 	conv_net.fit(X, y)
 
-	with open('breed_net.pk', 'wb') as out_file:
+	with open('breed_net_exp.pk', 'wb') as out_file:
 		pickle.dump(conv_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 	return conv_net
