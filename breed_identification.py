@@ -59,8 +59,8 @@ def train_conv_network(X, y):
 		input_shape=(None, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE),
 	    conv1_num_filters=32, conv1_filter_size=(3, 3), pool1_ds=(2, 2), dropout1_p=0.2,
 	    conv2_num_filters=64, conv2_filter_size=(3, 3), pool2_ds=(2, 2), dropout2_p=0.3,
-	    conv3_num_filters=128, conv3_filter_size=(2, 2), pool3_ds=(2, 2), dropout3_p=0.4,
-	    hidden4_num_units=1500, dropout4_p=0.85, hidden5_num_units=1000,
+	    conv3_num_filters=128, conv3_filter_size=(2, 2), pool3_ds=(2, 2), dropout3_p=0.3,
+	    hidden4_num_units=1750, dropout4_p=0.875, hidden5_num_units=1000,
 	    output_num_units=133, output_nonlinearity=softmax,
 
 	    #batch_iterator_train=AugmentBatchIterator(batch_size=256),
