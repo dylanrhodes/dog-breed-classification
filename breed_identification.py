@@ -118,7 +118,7 @@ random.shuffle(test_list)
 X_train, y_train = load_data(train_list)
 X_test, y_test = load_data(test_list)
 
-breed_net = train_dense_network(X_train, y_train)
+breed_net = train_conv_network(X_train, y_train)
 
 y_pred = breed_net.predict(X_test)
 accuracy = np.mean(y_pred == y_test)
