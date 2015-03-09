@@ -30,7 +30,7 @@ def load_data(img_list):
 		img = img.transpose((2, 1, 0)) * 1.0 / 255
 
 		X[idx,:,:,:] = img.astype(np.float32)
-		y[idx] = int(dog_path.split('_')[3])
+		y[idx] = int(dog_path.split('_')[3]) - 1
 
 		if idx % 500 == 0: print '{} IMAGES LOADED...'.format(idx)
 
