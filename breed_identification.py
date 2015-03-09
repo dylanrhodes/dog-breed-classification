@@ -28,7 +28,6 @@ def load_data(img_list):
 	for idx, dog_path in enumerate(img_list):
 		img = imread(dog_path)
 		img = img.transpose((2, 1, 0)) * 1.0 / 255
-		pdb.set_trace()
 
 		X[idx,:,:,:] = img.astype(np.float32)
 		y[idx] = np.array([int(dog_path.split('_')[3])])
@@ -93,7 +92,7 @@ def train_dense_network(X, y):
 	        ('output', layers.DenseLayer),
 	    ],
 	    
-	    input_shape=(None, IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS),
+	    input_shape=(None, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE),
 	    hidden_num_units=100,  
 	    output_nonlinearity=None,
 	    output_num_units=1,
@@ -118,8 +117,6 @@ random.shuffle(test_list)
 
 X_train, y_train = load_data(train_list)
 X_test, y_test = load_data(test_list)
-
-pdb.set_trace()
 
 breed_net = train_dense_network(X_train, y_train)
 
