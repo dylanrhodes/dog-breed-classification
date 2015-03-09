@@ -94,7 +94,7 @@ def train_dense_network(X, y):
 	    
 	    input_shape=(None, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE),
 	    hidden_num_units=1000,  
-	    output_nonlinearity=None,
+	    output_nonlinearity=softmax,
 	    output_num_units=133,
 
 	    update=nesterov_momentum,
