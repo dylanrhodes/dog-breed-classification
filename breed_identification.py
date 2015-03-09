@@ -115,6 +115,8 @@ test_list = [TEST_SET_DIR + file_name for file_name in listdir(TEST_SET_DIR)]
 X_train, y_train = load_data(train_list)
 X_test, y_test = load_data(test_list)
 
+pdb.set_trace()
+
 breed_net = train_dense_network(X_train, y_train)
 
 y_pred = breed_net.predict(X_test)
