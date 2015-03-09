@@ -37,6 +37,16 @@ def load_data(img_list):
 
 	return X, y
 
+class AugmentBatchIterator(BatchIterator):
+	def transform(self, Xb, yb):
+		Xb, yb = super(AugmentBatchIterator, self).transform(Xb, yb)
+
+		batch_size = Xb.shape[0]
+		flip_idx = np.random.choice(batch_size, batch_size / 2, replace=False)
+		Xb[flip_idx] = Xb[flip_idx, :, ::-1, :]
+
+		return Xb, yb
+
 def train_conv_network(X, y):
 	conv_net = NeuralNet(
 		layers=[
@@ -63,7 +73,7 @@ def train_conv_network(X, y):
 	    hidden4_num_units=1600, dropout4_p=0.75, hidden5_num_units=1000,
 	    output_num_units=133, output_nonlinearity=softmax,
 
-	    #batch_iterator_train=AugmentBatchIterator(batch_size=256),
+	    batch_iterator_train=AugmentBatchIterator(batch_size=256),
 
 	    update_learning_rate=theano.shared(np.cast['float32'](0.03)),
     	update_momentum=theano.shared(np.cast['float32'](0.9)),
