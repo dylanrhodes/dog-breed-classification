@@ -23,14 +23,14 @@ def load_data(img_list):
 	print 'LOADING IMAGE DATA...'
 
 	X = np.zeros((len(img_list), NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE), dtype=np.float32)
-	y = np.zeros((len(img_list), 1), dtype=np.float32)
+	y = np.zeros((len(img_list), 1), dtype=np.int32)
 
 	for idx, dog_path in enumerate(img_list):
 		img = imread(dog_path)
 		img = img.transpose((2, 1, 0)) * 1.0 / 255
 
 		X[idx,:,:,:] = img.astype(np.float32)
-		y[idx] = np.array([float(int(dog_path.split('_')[3]))])
+		y[idx] = np.array([int(dog_path.split('_')[3])])
 
 		if idx % 500 == 0: print '{} IMAGES LOADED...'.format(idx)
 
@@ -111,6 +111,9 @@ def train_dense_network(X, y):
 
 train_list = [TRAIN_SET_DIR + file_name for file_name in listdir(TRAIN_SET_DIR)]
 test_list = [TEST_SET_DIR + file_name for file_name in listdir(TEST_SET_DIR)]
+
+random.shuffle(train_list)
+random.shuffle(test_list)
 
 X_train, y_train = load_data(train_list)
 X_test, y_test = load_data(test_list)
