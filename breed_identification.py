@@ -51,7 +51,7 @@ def train_conv_network(X, y):
 	conv_net = NeuralNet(
 		layers=[
 			('input', layers.InputLayer),
-			('conv1a' layers.Conv2DLayer),
+			('conv1a', layers.Conv2DLayer),
 			('conv1', layers.Conv2DLayer),
 			('conv1b', layers.Conv2DLayer),
 			('pool1', layers.MaxPool2DLayer),
