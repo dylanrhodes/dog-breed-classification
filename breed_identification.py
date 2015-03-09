@@ -23,14 +23,14 @@ def load_data(img_list):
 	print 'LOADING IMAGE DATA...'
 
 	X = np.zeros((len(img_list), NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE), dtype=np.float32)
-	y = np.zeros((len(img_list)), dtype=np.int32)
+	y = np.zeros((len(img_list)), dtype=np.float32)
 
 	for idx, dog_path in enumerate(img_list):
 		img = imread(dog_path)
 		img = img.transpose((2, 1, 0)) * 1.0 / 255
 
 		X[idx,:,:,:] = img.astype(np.float32)
-		y[idx] = int(dog_path.split('_')[3])
+		y[idx] = float(int(dog_path.split('_')[3]))
 
 		if idx % 500 == 0: print '{} IMAGES LOADED...'.format(idx)
 
