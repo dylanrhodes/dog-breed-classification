@@ -22,7 +22,7 @@ random.seed(13131313)
 def load_data(img_list):
 	print 'LOADING IMAGE DATA...'
 
-	X = np.zeros((len(img_list), NUM_CHANNELS, IME_SIZE, IMAGE_SIZE), dtype=np.float32)
+	X = np.zeros((len(img_list), NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE), dtype=np.float32)
 	y = np.zeros((len(img_list)), dtype=np.float32)
 
 	for idx, dog_path in enumerate(img_list):
