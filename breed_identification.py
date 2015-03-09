@@ -1,5 +1,6 @@
 import cPickle as pickle
 from lasagne import layers
+from lasagne.nonlinearities import softmax
 from lasagne.updates import nesterov_momentum
 from nolearn.lasagne import NeuralNet, BatchIterator
 import numpy as np
