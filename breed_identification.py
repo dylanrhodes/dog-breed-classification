@@ -80,7 +80,7 @@ def train_conv_network(X, y):
 
 	conv_net.fit(X, y)
 
-	with open('breed_net_exp.pk', 'wb') as out_file:
+	with open('breed_net_exp_long.pk', 'wb') as out_file:
 		pickle.dump(conv_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 	return conv_net
