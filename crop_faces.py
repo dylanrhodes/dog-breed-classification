@@ -6,7 +6,8 @@ from extract_training_faces import *
 from load_theano_data import *
 
 CURRENT_MODEL = 'conv_net_dropout_large.pk'
-FACE_DIR = './cropped_images/{}.png'
+TRAIN_FACE_DIR = './cropped_images/train_set/{}.png'
+TEST_FACE_DIR = './cropped_images/test_set/{}.png'
 
 CROP_SIZE = 64
 NUM_CHANNELS = 3
@@ -36,7 +37,7 @@ def crop_box(img, bounding_box, slope):
 def load_model(filename):
 	return pickle.load(open(filename, 'rb'))
 
-def write_cropped_faces(file_list, X):
+def write_cropped_faces(file_list, X, output_dir):
 	network = load_model(CURRENT_MODEL)
 	y_pred = network.predict(X)
 	y_pred = np.reshape(y_pred, (y_pred.shape[0], y_pred.shape[1] / 2, 2))
@@ -55,15 +56,13 @@ def write_cropped_faces(file_list, X):
 		cropped_img = crop_box(img, corners, slope)
 
 		crop_file = 'crop_' + str(int(dog_file[:3])) + '_' + dog_file.split('/')[1]
-		imsave(FACE_DIR.format(crop_file), cropped_img)
+		imsave(output_dir.format(crop_file), cropped_img)
 
 train_list = get_training_list()
 test_list = get_testing_list()
 
-train_list = train_list[:1000]
-test_list = test_list[:1500]
+X_train, y_train = load_data(train_list)
+X_test, y_test = load_data(test_list)
 
-X_train, y_train = load_data(train_list + test_list[1000:])
-X_test, y_test = load_data(test_list[:1000])
-
-write_cropped_faces(test_list[:100], X_test[:100,:,:,:])
+write_cropped_faces(train_list, X_train, TRAIN_FACE_DIR)
+write_cropped_faces(test_list, X_test, TEST_FACE_DIR)
