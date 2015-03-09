@@ -101,7 +101,7 @@ def train_dense_network(X, y):
 	    update_learning_rate=0.01,
 	    update_momentum=0.9,
 
-	    regression=False,
+	    regression=True,
 	    max_epochs=50,
 	    verbose=1,
 	)
