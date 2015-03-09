@@ -57,9 +57,9 @@ def train_conv_network(X, y):
 		],
 
 		input_shape=(None, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE),
-	    conv1_num_filters=64, conv1_filter_size=(3, 3), pool1_ds=(2, 2), dropout1_p=0.5,
-	    conv2_num_filters=128, conv2_filter_size=(3, 3), pool2_ds=(2, 2), dropout2_p=0.7,
-	    conv3_num_filters=256, conv3_filter_size=(3, 3), pool3_ds=(2, 2), dropout3_p=0.8,
+	    conv1_num_filters=32, conv1_filter_size=(3, 3), pool1_ds=(2, 2), dropout1_p=0.2,
+	    conv2_num_filters=64, conv2_filter_size=(3, 3), pool2_ds=(2, 2), dropout2_p=0.3,
+	    conv3_num_filters=128, conv3_filter_size=(2, 2), pool3_ds=(2, 2), dropout3_p=0.4,
 	    hidden4_num_units=1500, dropout4_p=0.85, hidden5_num_units=1000,
 	    output_num_units=133, output_nonlinearity=softmax,
 
@@ -69,7 +69,7 @@ def train_conv_network(X, y):
     	update_momentum=theano.shared(np.cast['float32'](0.9)),
 
     	on_epoch_finished=[
-	        AdjustVariable('update_learning_rate', start=0.1, stop=0.0001),
+	        AdjustVariable('update_learning_rate', start=0.05, stop=0.0001),
 	        AdjustVariable('update_momentum', start=0.9, stop=0.999),
         ],
 
