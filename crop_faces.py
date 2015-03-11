@@ -82,7 +82,7 @@ def write_cropped_faces(file_list, X, output_dir):
 		corners, slope, distance = get_face_box(pred_points)
 		cropped_imgs = crop_box(dog_file, corners, slope)
 
-		if not cropped_imgs:
+		if cropped_imgs == None:
 			continue
 
 		for i in xrange(NUM_RAND_CROPS):
