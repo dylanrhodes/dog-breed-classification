@@ -1,5 +1,6 @@
 import cPickle as pickle
 from lasagne import layers
+from lasagne.nonlinearities import rectify_leaky
 from lasagne.updates import nesterov_momentum
 import matplotlib.pyplot as plt
 from nolearn.lasagne import NeuralNet, BatchIterator
@@ -13,7 +14,7 @@ from extract_training_faces import *
 
 IMAGE_PREFIX = '/home/ubuntu/dog-breed-classification/CU_Dogs/dogImages/{}.jpg'
 
-IMAGE_SIZE = 224
+IMAGE_SIZE = 200
 NUM_CHANNELS = 3
 
 PART_FLIP_IDXS = [
@@ -149,12 +150,12 @@ def train_conv_network(X, y, flip_idxs, out_file_name):
 		],
 
 		input_shape=(None, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE),
-		conv1a_num_filters=32, conv1a_filter_size=(5, 5),
-	    conv1_num_filters=32, conv1_filter_size=(5, 5), pool1_ds=(2, 2), dropout1_p=0.2,
-	    conv2a_num_filters=64, conv2a_filter_size=(5, 5),
-	    conv2_num_filters=128, conv2_filter_size=(5, 5), pool2_ds=(2, 2), dropout2_p=0.2,
-	    conv3a_num_filters=128, conv3a_filter_size=(3, 3),
-	    conv3_num_filters=256, conv3_filter_size=(3, 3), pool3_ds=(2, 2), dropout3_p=0.3,
+		conv1a_num_filters=32, conv1a_filter_size=(5, 5), conv1a_nonlinearity=rectify_leaky, 
+	    conv1_num_filters=32, conv1_filter_size=(5, 5), conv1_nonlinearity=rectify_leaky, pool1_ds=(2, 2), dropout1_p=0.2,
+	    conv2a_num_filters=64, conv2a_filter_size=(5, 5), conv2a_nonlinearity=rectify_leaky,
+	    conv2_num_filters=128, conv2_filter_size=(5, 5), conv2_nonlinearity=rectify_leaky, pool2_ds=(2, 2), dropout2_p=0.2,
+	    conv3a_num_filters=128, conv3a_filter_size=(3, 3), conv3a_nonlinearity=rectify_leaky,
+	    conv3_num_filters=256, conv3_filter_size=(3, 3), conv3_nonlinearity=rectify_leaky, pool3_ds=(2, 2), dropout3_p=0.3,
 	    hidden4_num_units=1000, dropout4_p=0.7, hidden5_num_units=1000,
 	    output_num_units=y.shape[1], output_nonlinearity=None,
 
