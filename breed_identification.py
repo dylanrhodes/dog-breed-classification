@@ -98,7 +98,7 @@ def train_conv_network(X, y):
         ],
 
 	    regression=False,
-	    max_epochs=2000,
+	    max_epochs=250,
 	    verbose=1,
 	)
 
