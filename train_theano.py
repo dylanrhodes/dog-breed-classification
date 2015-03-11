@@ -38,13 +38,13 @@ random.shuffle(test_list)
 X_train, y_train = load_data(train_list + test_list[1000:])
 X_test, y_test = load_data(test_list[:1000])
 
-eye_net = train_conv_network(X_train, y_train[:, MODEL_MASKS[0]], PART_FLIPS[0])
+eye_net = train_conv_network(X_train, y_train[:, MODEL_MASKS[0]], PART_FLIPS[0], 'eye_net.pk')
 print "EYE MEAN SQ. ERROR: {}".format(mean_squared_error(eye_net.predict(X_test), y_test[:, MODEL_MASKS[0]]))
 
-nose_net = train_conv_network(X_train, y_train[:, MODEL_MASKS[1]], PART_FLIPS[1])
+nose_net = train_conv_network(X_train, y_train[:, MODEL_MASKS[1]], PART_FLIPS[1], 'nose_net.pk')
 print "NOSE MEAN SQ. ERROR: {}".format(mean_squared_error(nose_net.predict(X_test), y_test[:, MODEL_MASKS[1]]))
 
-ear_net = train_conv_network(X_train, y_train[:, MODEL_MASKS[2]], PART_FLIPS[2])
+ear_net = train_conv_network(X_train, y_train[:, MODEL_MASKS[2]], PART_FLIPS[2], 'ear_net.pk')
 print "EAR MEAN SQ. ERROR: {}".format(mean_squared_error(ear_net.predict(X_test), y_test[:, MODEL_MASKS[2]]))
 
 pdb.set_trace()
