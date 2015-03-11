@@ -12,7 +12,7 @@ import theano
 
 from load_theano_data import AdjustVariable, plot_loss
 
-TRAIN_SET_DIR = './cropped_images/train_set/'
+TRAIN_SET_DIR = './rand_crops/train_set/'
 TEST_SET_DIR = './cropped_images/test_set/'
 
 IMAGE_SIZE = 64
@@ -45,6 +45,14 @@ class AugmentBatchIterator(BatchIterator):
 		flip_idx = np.random.choice(batch_size, batch_size / 2, replace=False)
 		Xb[flip_idx] = Xb[flip_idx, :, ::-1, :]
 
+		# Jitter contrast
+		contrast_jitter = np.random.normal(1, 0.07, (Xb.shape[0], 1, 1, 1))
+		Xb *= contrast_jitter
+
+		# Jitter tint
+		tint_jitter = np.random.uniform(0.0, 0.05, (Xb.shape[0], 3, 1, 1))
+		Xb += tint_jitter
+
 		return Xb, yb
 
 def train_conv_network(X, y):
@@ -59,6 +67,7 @@ def train_conv_network(X, y):
         	('conv2', layers.Conv2DLayer),
 	        ('pool2', layers.MaxPool2DLayer),
 	        ('dropout2', layers.DropoutLayer),
+	        ('conv3a', layers.Conv2DLayer),
 	        ('conv3', layers.Conv2DLayer),
 	        ('pool3', layers.MaxPool2DLayer),
 	        ('dropout3', layers.DropoutLayer),
@@ -72,12 +81,13 @@ def train_conv_network(X, y):
 		conv1a_num_filters=32, conv1a_filter_size=(3, 3), 
 	    conv1_num_filters=64, conv1_filter_size=(3, 3), pool1_ds=(2, 2), dropout1_p=0.2,
 	    conv2a_num_filters=64, conv2a_filter_size=(3, 3), 
-	    conv2_num_filters=128, conv2_filter_size=(3, 3), pool2_ds=(2, 2), dropout2_p=0.3,
-	    conv3_num_filters=256, conv3_filter_size=(2, 2), pool3_ds=(2, 2), dropout3_p=0.4,
+	    conv2_num_filters=128, conv2_filter_size=(3, 3), pool2_ds=(2, 2), dropout2_p=0.2,
+	    conv3a_num_filters=256, conv3a_filter_size=(3, 3),
+	    conv3_num_filters=256, conv3_filter_size=(3, 3), pool3_ds=(2, 2), dropout3_p=0.3,
 	    hidden4_num_units=1800, dropout4_p=0.75, hidden5_num_units=1000,
 	    output_num_units=133, output_nonlinearity=softmax,
 
-	    batch_iterator_train=AugmentBatchIterator(batch_size=512),
+	    batch_iterator_train=AugmentBatchIterator(batch_size=1024),
 
 	    update_learning_rate=theano.shared(np.cast['float32'](0.03)),
     	update_momentum=theano.shared(np.cast['float32'](0.9)),

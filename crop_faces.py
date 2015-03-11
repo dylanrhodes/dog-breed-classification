@@ -17,8 +17,11 @@ NUM_RAND_CROPS = 6
 def crop_box(dog_path, bounding_box, slope):
 	img = imread(IMAGE_PREFIX.format(dog_path))
 
-	x_scale = img.shape[1] * 1.0 / IMAGE_SIZE
-	y_scale = img.shape[0] * 1.0 / IMAGE_SIZE
+	try:
+		x_scale = img.shape[1] * 1.0 / IMAGE_SIZE
+		y_scale = img.shape[0] * 1.0 / IMAGE_SIZE
+	except:
+		return None
 
 	bounding_box[:,0] *= x_scale
 	bounding_box[:,1] *= y_scale
@@ -79,6 +82,9 @@ def write_cropped_faces(file_list, X, output_dir):
 		corners, slope, distance = get_face_box(pred_points)
 		cropped_imgs = crop_box(dog_file, corners, slope)
 
+		if not cropped_imgs:
+			continue
+
 		for i in xrange(NUM_RAND_CROPS):
 			crop_file = 'c_' + str(int(dog_file[:3])) + '_' + dog_file.split('/')[1] + str(i)
 			imsave(output_dir.format(crop_file), cropped_imgs[i])
@@ -87,7 +93,7 @@ train_list = get_training_list()
 test_list = get_testing_list()
 
 X_train, y_train = load_data(train_list)
-X_test, y_test = load_data(test_list)
+#X_test, y_test = load_data(test_list)
 
 write_cropped_faces(train_list, X_train, TRAIN_FACE_DIR)
-write_cropped_faces(test_list, X_test, TEST_FACE_DIR)
+#write_cropped_faces(test_list, X_test, TEST_FACE_DIR)
