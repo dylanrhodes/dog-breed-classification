@@ -13,7 +13,7 @@ from extract_training_faces import *
 
 IMAGE_PREFIX = '/home/ubuntu/dog-breed-classification/CU_Dogs/dogImages/{}.jpg'
 
-IMAGE_SIZE = 256
+IMAGE_SIZE = 180
 NUM_CHANNELS = 3
 
 PART_FLIP_IDXS = [
@@ -90,6 +90,14 @@ class AugmentBatchIterator(BatchIterator):
 		flip_idx = np.random.choice(batch_size, batch_size / 2, replace=False)
 		Xb[flip_idx] = Xb[flip_idx, :, ::-1, :]
 
+		# Jitter contrast
+		contrast_jitter = np.random.normal(1, 0.07, (Xb.shape[0], 1, 1, 1))
+		Xb *= contrast_jitter
+
+		# Jitter tint
+		tint_jitter = np.random.uniform(0.0, 0.05, (Xb.shape[0], 1, 1, 3))
+		Xb += tint_jitter
+
 		if yb is not None:
 			x_cols = np.array([i for i in xrange(yb.shape[1]) if i % 2 == 0])
 			x_cols = np.tile(x_cols, len(flip_idx))
@@ -150,7 +158,7 @@ def train_conv_network(X, y, flip_idxs, out_file_name):
 	    hidden4_num_units=1000, dropout4_p=0.7, hidden5_num_units=1000,
 	    output_num_units=y.shape[1], output_nonlinearity=None,
 
-	    batch_iterator_train=AugmentBatchIterator(batch_size=200),
+	    batch_iterator_train=AugmentBatchIterator(batch_size=128),
 
 	    update_learning_rate=theano.shared(np.cast['float32'](0.03)),
     	update_momentum=theano.shared(np.cast['float32'](0.9)),
