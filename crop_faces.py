@@ -74,7 +74,7 @@ def write_cropped_faces(file_list, X, output_dir):
 
 		for i in xrange(NUM_RAND_CROPS):
 			crop_file = 'c{}_'.format(i) + str(int(dog_file[:3])) + '_' + dog_file.split('/')[1]
-			imsave(output_dir.format(crop_file), cropped_img)
+			imsave(output_dir.format(crop_file), cropped_imgs[i])
 
 train_list = get_training_list()
 test_list = get_testing_list()
