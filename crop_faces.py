@@ -6,13 +6,14 @@ from extract_training_faces import *
 from load_theano_data import *
 
 CURRENT_MODEL = 'conv_net_dropout_large.pk'
-TRAIN_FACE_DIR = './cropped_images/train_set/{}.png'
-TEST_FACE_DIR = './cropped_images/test_set/{}.png'
+TRAIN_FACE_DIR = './full_images/train_set/{}.png'
+TEST_FACE_DIR = './full_images/test_set/{}.png'
 
 CROP_SIZE = 64
 NUM_CHANNELS = 3
 
 def crop_box(img, bounding_box, slope):
+	"""
 	theta = (np.arctan2(slope[0], slope[1]) + np.pi / 2)
 	theta_deg = theta * 180 / np.pi * -1
 	rotation_mat = np.array([[np.cos(theta), -1 * np.sin(theta)], [np.sin(theta), np.cos(theta)]])
@@ -31,8 +32,9 @@ def crop_box(img, bounding_box, slope):
 		resized_img = imresize(cropped_img, (CROP_SIZE, CROP_SIZE, NUM_CHANNELS), interp='bicubic')
 	except:
 		import pdb; pdb.set_trace()
+	"""
 
-	return resized_img
+	return imresize(img, (CROP_SIZE, CROP_SIZE, NUM_CHANNELS), interp='bicubic')
 
 def load_model(filename):
 	return pickle.load(open(filename, 'rb'))
