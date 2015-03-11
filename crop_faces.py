@@ -20,8 +20,8 @@ def crop_box(dog_path, bounding_box, slope):
 	x_scale = img.shape[1] * 1.0 / IMAGE_SIZE
 	y_scale = img.shape[0] * 1.0 / IMAGE_SIZE
 
-	bounding_box[0,:] *= x_scale
-	bounding_box[1,:] *= y_scale
+	bounding_box[:,0] *= x_scale
+	bounding_box[:,1] *= y_scale
 
 	resized_imgs = np.zeros((NUM_RAND_CROPS, CROP_SIZE, CROP_SIZE, NUM_CHANNELS))
 
