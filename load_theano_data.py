@@ -156,7 +156,7 @@ def train_conv_network(X, y, flip_idxs, out_file_name):
 	    conv2_num_filters=64, conv2_filter_size=(5, 5), conv2_nonlinearity=rectify_leaky, pool2_ds=(2, 2), dropout2_p=0.2,
 	    conv3a_num_filters=128, conv3a_filter_size=(3, 3), conv3a_nonlinearity=rectify_leaky,
 	    conv3_num_filters=256, conv3_filter_size=(3, 3), conv3_nonlinearity=rectify_leaky, pool3_ds=(2, 2), dropout3_p=0.3,
-	    hidden4_num_units=1000, dropout4_p=0.7, hidden5_num_units=1000,
+	    hidden4_num_units=1250, dropout4_p=0.7, hidden5_num_units=1000,
 	    output_num_units=y.shape[1], output_nonlinearity=None,
 
 	    batch_iterator_train=AugmentBatchIterator(batch_size=180),
