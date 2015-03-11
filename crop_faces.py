@@ -70,6 +70,8 @@ def write_cropped_faces(file_list, X, output_dir):
 	y_pred = np.reshape(y_pred, (y_pred.shape[0], y_pred.shape[1] / 2, 2))
 
 	for i, dog_file in enumerate(file_list):
+		if i % 100 == 0: print '{} / {} CROPPED...'.format(i, len(file_list))
+
 		img = X[i].transpose((2,1,0))
 
 		scale = IMAGE_SIZE / 2
