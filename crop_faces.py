@@ -89,5 +89,5 @@ test_list = get_testing_list()
 X_train, y_train = load_data(train_list)
 X_test, y_test = load_data(test_list)
 
-write_cropped_faces(train_list[:100], X_train, TRAIN_FACE_DIR)
-write_cropped_faces(test_list[:100], X_test, TEST_FACE_DIR)
+write_cropped_faces(train_list, X_train, TRAIN_FACE_DIR)
+write_cropped_faces(test_list, X_test, TEST_FACE_DIR)
