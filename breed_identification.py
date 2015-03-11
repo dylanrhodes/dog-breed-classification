@@ -87,7 +87,7 @@ def train_conv_network(X, y):
 	    hidden4_num_units=1800, dropout4_p=0.75, hidden5_num_units=1000,
 	    output_num_units=133, output_nonlinearity=softmax,
 
-	    batch_iterator_train=AugmentBatchIterator(batch_size=1024),
+	    batch_iterator_train=AugmentBatchIterator(batch_size=4096),
 
 	    update_learning_rate=theano.shared(np.cast['float32'](0.03)),
     	update_momentum=theano.shared(np.cast['float32'](0.9)),
@@ -104,7 +104,7 @@ def train_conv_network(X, y):
 
 	conv_net.fit(X, y)
 
-	with open('dense_breed.pk', 'wb') as out_file:
+	with open('rand_crop_breed.pk', 'wb') as out_file:
 		pickle.dump(conv_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 	return conv_net
@@ -140,8 +140,8 @@ test_list = [TEST_SET_DIR + file_name for file_name in listdir(TEST_SET_DIR)]
 random.shuffle(train_list)
 random.shuffle(test_list)
 
-X_train, y_train = load_data(train_list)
-X_test, y_test = load_data(test_list)
+X_train, y_train = load_data(train_list[:1000])
+X_test, y_test = load_data(test_list[:1000])
 
 breed_net = train_conv_network(X_train, y_train)
 
