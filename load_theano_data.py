@@ -131,7 +131,7 @@ def train_conv_network(X, y, flip_idxs, out_file_name):
 	conv_net = NeuralNet(
 		layers=[
 			('input', layers.InputLayer),
-			#('conv1a', layers.Conv2DLayer),
+			('conv1a', layers.Conv2DLayer),
 			('conv1', layers.Conv2DLayer),
 			('pool1', layers.MaxPool2DLayer),
 			('dropout1', layers.DropoutLayer),
@@ -150,7 +150,7 @@ def train_conv_network(X, y, flip_idxs, out_file_name):
 		],
 
 		input_shape=(None, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE),
-		#conv1a_num_filters=32, conv1a_filter_size=(5, 5), conv1a_nonlinearity=rectify_leaky, 
+		conv1a_num_filters=32, conv1a_filter_size=(5, 5), conv1a_nonlinearity=rectify_leaky, 
 	    conv1_num_filters=32, conv1_filter_size=(5, 5), conv1_nonlinearity=rectify_leaky, pool1_ds=(2, 2), dropout1_p=0.2,
 	    #conv2a_num_filters=64, conv2a_filter_size=(5, 5), conv2a_nonlinearity=rectify_leaky,
 	    conv2_num_filters=64, conv2_filter_size=(5, 5), conv2_nonlinearity=rectify_leaky, pool2_ds=(2, 2), dropout2_p=0.2,
