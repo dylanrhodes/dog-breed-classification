@@ -14,7 +14,7 @@ from extract_training_faces import *
 
 IMAGE_PREFIX = '/home/ubuntu/dog-breed-classification/CU_Dogs/dogImages/{}.jpg'
 
-IMAGE_SIZE = 200
+IMAGE_SIZE = 176
 NUM_CHANNELS = 3
 
 PART_FLIP_IDXS = [
