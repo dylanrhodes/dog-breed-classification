@@ -13,7 +13,7 @@ from extract_training_faces import *
 
 IMAGE_PREFIX = '/home/ubuntu/dog-breed-classification/CU_Dogs/dogImages/{}.jpg'
 
-IMAGE_SIZE = 180
+IMAGE_SIZE = 224
 NUM_CHANNELS = 3
 
 PART_FLIP_IDXS = [
@@ -95,7 +95,7 @@ class AugmentBatchIterator(BatchIterator):
 		Xb *= contrast_jitter
 
 		# Jitter tint
-		tint_jitter = np.random.uniform(0.0, 0.05, (Xb.shape[0], 1, 1, 3))
+		tint_jitter = np.random.uniform(0.0, 0.05, (Xb.shape[0], 3, 1, 1))
 		Xb += tint_jitter
 
 		if yb is not None:
