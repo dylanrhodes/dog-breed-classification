@@ -12,7 +12,7 @@ TEST_FACE_DIR = './rand_crops/test_set/{}.png'
 CROP_SIZE = 64
 NUM_CHANNELS = 3
 
-NUM_RAND_CROPS = 5
+NUM_RAND_CROPS = 6
 
 def crop_box(dog_path, bounding_box, slope):
 	img = imread(IMAGE_PREFIX.format(dog_path))
@@ -27,7 +27,9 @@ def crop_box(dog_path, bounding_box, slope):
 
 	for i in xrange(NUM_RAND_CROPS):
 		theta = (np.arctan2(slope[0], slope[1]) + np.pi / 2)
-		theta = np.random.normal(theta, 0.05)
+
+		if i != 0:
+			theta = np.random.normal(theta, 0.05)
 
 		theta_deg = theta * 180 / np.pi * -1
 		rotation_mat = np.array([[np.cos(theta), -1 * np.sin(theta)], [np.sin(theta), np.cos(theta)]])
@@ -36,12 +38,17 @@ def crop_box(dog_path, bounding_box, slope):
 		
 		box_rotate = rotation_mat.dot(bounding_box.T)
 
-		rand_shift = np.random.normal(0.0, 8.0)
+		if i == 0:
+			rand_shift_x = 0.0
+			rand_shift_y = 0.0
+		else:
+			rand_shift_x = np.random.normal(0.0, 3.0) * x_scale
+			rand_shift_y = np.random.normal(0.0, 3.0) * y_scale
 
-		x_min = max(round((box_rotate[0,0] + box_rotate[0,1]) / 2 + rand_shift), 0.0)
-		x_max = min(round((box_rotate[0,2] + box_rotate[0,3]) / 2 + rand_shift), img_rotate.shape[1])
-		y_min = max(round((box_rotate[1,0] + box_rotate[1,3]) / 2 + rand_shift), 0.0)
-		y_max = min(round((box_rotate[1,1] + box_rotate[1,2]) / 2 + rand_shift), img_rotate.shape[0])
+		x_min = max(round((box_rotate[0,0] + box_rotate[0,1]) / 2 + rand_shift_x), 0.0)
+		x_max = min(round((box_rotate[0,2] + box_rotate[0,3]) / 2 + rand_shift_x), img_rotate.shape[1])
+		y_min = max(round((box_rotate[1,0] + box_rotate[1,3]) / 2 + rand_shift_y), 0.0)
+		y_max = min(round((box_rotate[1,1] + box_rotate[1,2]) / 2 + rand_shift_y), img_rotate.shape[0])
 
 		try:
 			cropped_img = img_rotate[y_min:y_max, x_min:x_max, :]
