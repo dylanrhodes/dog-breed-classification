@@ -97,10 +97,10 @@ class AugmentBatchIterator(BatchIterator):
 			yb[np.repeat(flip_idx, len(x_cols) / len(flip_idx)), x_cols] = yb[np.repeat(flip_idx, len(x_cols) / len(flip_idx)), x_cols] * -1
 
 			# Swap left parts for right parts eg. LEFT EYE <-> RIGHT EYE
-			for idx_pair in PART_FLIP_IDXS:
-				tmp = yb[flip_idx, (2 * idx_pair[0]):(2 * idx_pair[0] + 1)]
-				yb[flip_idx, (2 * idx_pair[0]):(2 * idx_pair[0] + 1)] = yb[:, (2 * idx_pair[1]):(2 * idx_pair[1] + 1)]
-				yb[flip_idx, (2 * idx_pair[1]):(2 * idx_pair[1] + 1)] = tmp
+			for left, right in self.part_flips:
+				tmp = yb[flip_idx, left]
+				yb[flip_idx, left] = yb[flip_idx, right]
+				yb[flip_idx, right] = tmp
 
 		return Xb, yb
 
@@ -118,7 +118,7 @@ class AdjustVariable(object):
 		new_value = np.cast['float32'](self.ls[epoch - 1])
 		getattr(nn, self.name).set_value(new_value)
 
-def train_conv_network(X, y):
+def train_conv_network(X, y, flip_idxs, out_file_name):
 	conv_net = NeuralNet(
 		layers=[
 			('input', layers.InputLayer),
@@ -138,13 +138,13 @@ def train_conv_network(X, y):
 		],
 
 		input_shape=(None, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE),
-	    conv1_num_filters=32, conv1_filter_size=(5, 5), pool1_ds=(2, 2), dropout1_p=0.5,
-	    conv2_num_filters=64, conv2_filter_size=(5, 5), pool2_ds=(2, 2), dropout2_p=0.6,
-	    conv3_num_filters=128, conv3_filter_size=(5, 5), pool3_ds=(2, 2), dropout3_p=0.7,
+	    conv1_num_filters=32, conv1_filter_size=(5, 5), pool1_ds=(2, 2), dropout1_p=0.2,
+	    conv2_num_filters=64, conv2_filter_size=(5, 5), pool2_ds=(2, 2), dropout2_p=0.3,
+	    conv3_num_filters=128, conv3_filter_size=(3, 3), pool3_ds=(2, 2), dropout3_p=0.4,
 	    hidden4_num_units=1000, dropout4_p=0.7, hidden5_num_units=1000,
-	    output_num_units=16, output_nonlinearity=None,
+	    output_num_units=y.shape[1], output_nonlinearity=None,
 
-	    #batch_iterator_train=AugmentBatchIterator(batch_size=256),
+	    batch_iterator_train=AugmentBatchIterator(batch_size=256),
 
 	    update_learning_rate=theano.shared(np.cast['float32'](0.03)),
     	update_momentum=theano.shared(np.cast['float32'](0.9)),
@@ -159,13 +159,12 @@ def train_conv_network(X, y):
 	    verbose=1,
 	)
 
+	conv_net.batch_iterator_train.part_flips = flip_idxs
+
 	conv_net.fit(X, y)
 
-	with open('conv_net_full.pk', 'wb') as out_file:
+	with open(out_file_name, 'wb') as out_file:
 		pickle.dump(conv_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
-
-	with open('conv_net_other.pk', 'wb') as out_file:
-		pickle.dump(conv_net, out_file, protocol=-1)
 
 	return conv_net
 

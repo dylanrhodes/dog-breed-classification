@@ -5,6 +5,26 @@ from sklearn.metrics import mean_squared_error
 from extract_training_faces import *
 from load_theano_data import *
 
+MODEL_MASKS = [
+	[0, 1, 2, 3],
+	[4, 5],
+	[6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+]
+
+PART_FLIPS = [
+	[
+		(0, 2),
+		(1, 3),
+	],
+	[],
+	[
+		(0, 8),
+		(1, 9),
+		(2, 6),
+		(3, 7),
+	]
+]
+
 random.seed(13131313)
 
 train_list = get_training_list()
@@ -18,8 +38,13 @@ random.shuffle(test_list)
 X_train, y_train = load_data(train_list + test_list[1000:])
 X_test, y_test = load_data(test_list[:1000])
 
-conv_net = train_conv_network(X_train, y_train)
+eye_net = train_conv_network(X_train, y_train[:, MODEL_MASKS[0]], PART_FLIPS[0])
+print "EYE MEAN SQ. ERROR: {}".format(mean_squared_error(eye_net.predict(X_test), y_test[:, MODEL_MASKS[0]]))
 
-print "MEAN SQUARED ERROR: {}".format(mean_squared_error(conv_net.predict(X_test), y_test))
+nose_net = train_conv_network(X_train, y_train[:, MODEL_MASKS[1]], PART_FLIPS[1])
+print "NOSE MEAN SQ. ERROR: {}".format(mean_squared_error(nose_net.predict(X_test), y_test[:, MODEL_MASKS[1]]))
+
+ear_net = train_conv_network(X_train, y_train[:, MODEL_MASKS[2]], PART_FLIPS[2])
+print "EAR MEAN SQ. ERROR: {}".format(mean_squared_error(ear_net.predict(X_test), y_test[:, MODEL_MASKS[2]]))
 
 pdb.set_trace()
