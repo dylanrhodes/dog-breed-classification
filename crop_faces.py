@@ -80,8 +80,7 @@ def write_cropped_faces(file_list, X, output_dir):
 		cropped_imgs = crop_box(dog_file, corners, slope)
 
 		for i in xrange(NUM_RAND_CROPS):
-			crop_file = 'c_' + str(int(dog_file[:3])) + '_' + dog_file.split('/')[1][:-4] + str(i) + '.png'
-			pdb.set_trace()
+			crop_file = 'c_' + str(int(dog_file[:3])) + '_' + dog_file.split('/')[1] + str(i)
 			imsave(output_dir.format(crop_file), cropped_imgs[i])
 
 train_list = get_training_list()
