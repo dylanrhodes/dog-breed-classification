@@ -187,18 +187,19 @@ def train_conv_network(X, y, flip_idxs, out_file_name):
     	update_momentum=theano.shared(np.cast['float32'](0.9)),
 
     	on_epoch_finished=[
-	        AdjustVariable('update_learning_rate', start=0.01, stop=0.0001),
+	        AdjustVariable('update_learning_rate', start=0.001, stop=0.0001),
 	        AdjustVariable('update_momentum', start=0.9, stop=0.999),
 	        StoreBestModel('wb_' + out_file_name)
         ],
 
 	    regression=True,
-	    max_epochs=350,
+	    max_epochs=250,
 	    eval_size=0.1,
 	    verbose=1,
 	)
 
 	conv_net.batch_iterator_train.part_flips = flip_idxs
+	conv_net.load_weights_from('wb_keypoint_net.pk')
 
 	conv_net.fit(X, y)
 
