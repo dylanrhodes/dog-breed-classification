@@ -193,7 +193,7 @@ def train_conv_network(X, y, flip_idxs, out_file_name):
         ],
 
 	    regression=True,
-	    max_epochs=250,
+	    max_epochs=600,
 	    eval_size=0.1,
 	    verbose=1,
 	)
