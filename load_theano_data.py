@@ -249,10 +249,10 @@ def plot_prediction(network, X, y, idx):
 
 	y_pred = network.predict(X)
 	y_pred = y_pred[idx] * scale + scale
-	y_pred = np.reshape(y_pred, (2, len(y_pred) / 2))
+	y_pred = np.reshape(y_pred, (len(y_pred) / 2, 2))
 
 	y_test = y[idx] * scale + scale
-	y_test = np.reshape(y_test, (2, len(y_test) / 2))
+	y_test = np.reshape(y_test, (len(y_test) / 2, 2))
 
 	plt.imshow(img)
 	plt.plot(y_pred, 'rx')

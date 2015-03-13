@@ -45,7 +45,7 @@ random.shuffle(test_list)
 X_train, y_train = load_data(train_list + test_list[800:])
 X_test, y_test = load_data(test_list[:800])
 
-conv_net = train_conv_network(X_train, y_train, FULL_FLIP_SET, 'keypoint_net.pk')
+conv_net = train_conv_network(X_train, y_train, FULL_FLIP_SET, 'keypoint_net_p2.pk')
 print "NET MSE: {}".format(mean_squared_error(conv_net.predict(X_test), y_test))
 
 """
