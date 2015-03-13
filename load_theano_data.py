@@ -85,7 +85,7 @@ def train_dense_network(X, y):
 
 
 class StoreBestModel(object):
-	def __init__(self, save_file, wait_time=300):
+	def __init__(self, save_file, wait_time=350):
 		self.wait_time = wait_time
 		self.save_file = save_file
 		self.best_loss = 1e10
@@ -100,6 +100,9 @@ class StoreBestModel(object):
 			print "MODEL HAS NOT IMPROVED SINCE EPOCH {} WITH LOSS {}".format(self.model_epoch, self.best_loss)
 			curr_net.load_weights_from(self.save_file)
 			raise StopIteration()
+
+		if loss_history[-1]['epoch'] == 350:
+			curr_net.load_weights_from(self.save_file)
 
 
 class AugmentBatchIterator(BatchIterator):
@@ -190,7 +193,7 @@ def train_conv_network(X, y, flip_idxs, out_file_name):
         ],
 
 	    regression=True,
-	    max_epochs=1000,
+	    max_epochs=350,
 	    eval_size=0.1,
 	    verbose=1,
 	)
