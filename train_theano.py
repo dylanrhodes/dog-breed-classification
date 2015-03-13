@@ -39,8 +39,6 @@ random.seed(13131313)
 train_list = get_training_list()
 test_list = get_testing_list()
 
-train_list = train_list[:1000]
-
 random.shuffle(train_list)
 random.shuffle(test_list)
 
