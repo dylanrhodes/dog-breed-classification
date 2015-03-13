@@ -153,15 +153,15 @@ def train_conv_network(X, y, flip_idxs, out_file_name):
 	conv_net = NeuralNet(
 		layers=[
 			('input', layers.InputLayer),
-			('conv1a', layers.Conv2DLayer),
+			#('conv1a', layers.Conv2DLayer),
 			('conv1', layers.Conv2DLayer),
 			('pool1', layers.MaxPool2DLayer),
 			('dropout1', layers.DropoutLayer),
-			('conv2a', layers.Conv2DLayer),
+			#('conv2a', layers.Conv2DLayer),
         	('conv2', layers.Conv2DLayer),
 	        ('pool2', layers.MaxPool2DLayer),
 	        ('dropout2', layers.DropoutLayer),
-	        ('conv3a', layers.Conv2DLayer),
+	        #('conv3a', layers.Conv2DLayer),
 	        ('conv3', layers.Conv2DLayer),
 	        ('pool3', layers.MaxPool2DLayer),
 	        ('dropout3', layers.DropoutLayer),
