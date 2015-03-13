@@ -85,7 +85,7 @@ def train_dense_network(X, y):
 
 
 class StoreBestModel(object):
-	def __init__(self, save_file, wait_time=50):
+	def __init__(self, save_file, wait_time=300):
 		self.wait_time = wait_time
 		self.save_file = save_file
 		self.best_loss = 1e10
@@ -191,6 +191,7 @@ def train_conv_network(X, y, flip_idxs, out_file_name):
 
 	    regression=True,
 	    max_epochs=1000,
+	    eval_size=0.1,
 	    verbose=1,
 	)
 
