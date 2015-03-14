@@ -6,8 +6,8 @@ from extract_training_faces import *
 from load_theano_data import *
 
 CURRENT_MODEL = 'keypoint_net_p2.pk'
-TRAIN_FACE_DIR = './rand_crops/train_set/{}.png'
-TEST_FACE_DIR = './rand_crops/test_set/{}.png'
+TRAIN_FACE_DIR = './final_data/train_set/{}.png'
+TEST_FACE_DIR = './final_data/test_set/{}.png'
 
 CROP_SIZE = 64
 NUM_CHANNELS = 3
