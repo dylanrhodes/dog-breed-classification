@@ -5,7 +5,7 @@ from scipy.misc import imrotate, imresize, imsave
 from extract_training_faces import *
 from load_theano_data import *
 
-CURRENT_MODEL = 'conv_net_dropout_large.pk'
+CURRENT_MODEL = 'keypoint_net_p2.pk'
 TRAIN_FACE_DIR = './rand_crops/train_set/{}.png'
 TEST_FACE_DIR = './rand_crops/test_set/{}.png'
 
@@ -95,7 +95,7 @@ train_list = get_training_list()
 test_list = get_testing_list()
 
 X_train, y_train = load_data(train_list)
-#X_test, y_test = load_data(test_list)
+X_test, y_test = load_data(test_list)
 
 write_cropped_faces(train_list, X_train, TRAIN_FACE_DIR)
-#write_cropped_faces(test_list, X_test, TEST_FACE_DIR)
+write_cropped_faces(test_list, X_test, TEST_FACE_DIR)
