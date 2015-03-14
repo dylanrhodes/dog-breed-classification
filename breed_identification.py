@@ -12,7 +12,7 @@ import theano
 
 from load_theano_data import AdjustVariable, plot_loss
 
-TRAIN_SET_DIR = './rand_crops/train_set/'
+TRAIN_SET_DIR = './final_data/train_set/'
 TEST_SET_DIR = './cropped_images/test_set/'
 
 IMAGE_SIZE = 64
@@ -55,6 +55,26 @@ class AugmentBatchIterator(BatchIterator):
 
 		return Xb, yb
 
+class StoreBestModel(object):
+	def __init__(self, save_file, wait_time=350):
+		self.wait_time = wait_time
+		self.save_file = save_file
+		self.best_loss = 1e10
+		self.model_epoch = 0
+
+	def __call__(self, curr_net, loss_history):
+		if loss_history[-1]['valid_loss'] < self.best_loss:
+			self.best_loss = loss_history[-1]['valid_loss']
+			self.model_epoch = loss_history[-1]['epoch']
+			curr_net.save_weights_to(self.save_file)
+
+			with open('final_breed_best.pk', 'wb') as out_file:
+				pickle.dump(curr_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
+
+		if loss_history[-1]['epoch'] % 100 == 0:
+			with open('final_breed_it_{}.pk'.format(loss_history[-1]['epoch']), 'wb') as out_file:
+				pickle.dump(curr_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
+
 def train_conv_network(X, y):
 	conv_net = NeuralNet(
 		layers=[
@@ -95,16 +115,18 @@ def train_conv_network(X, y):
     	on_epoch_finished=[
 	        AdjustVariable('update_learning_rate', start=0.01, stop=0.0001),
 	        AdjustVariable('update_momentum', start=0.9, stop=0.999),
+	        StoreBestModel('wb_' + out_file_name)
         ],
 
 	    regression=False,
-	    max_epochs=2000,
+	    max_epochs=650,
+	    eval_size=0.05,
 	    verbose=1,
 	)
 
 	conv_net.fit(X, y)
 
-	with open('rand_crop_breed.pk', 'wb') as out_file:
+	with open('overnight_final_breed.pk', 'wb') as out_file:
 		pickle.dump(conv_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 	return conv_net
@@ -141,10 +163,9 @@ random.shuffle(train_list)
 random.shuffle(test_list)
 
 X_train, y_train = load_data(train_list)
-X_test, y_test = load_data(test_list)
-
 breed_net = train_conv_network(X_train, y_train)
 
+X_test, y_test = load_data(test_list)
 y_pred = breed_net.predict(X_test)
 accuracy = np.mean(y_pred == y_test)
 
