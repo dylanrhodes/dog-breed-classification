@@ -12,8 +12,8 @@ import theano
 
 from load_theano_data import AdjustVariable, plot_loss
 
-TRAIN_SET_DIR = './final_data/train_set/'
-TEST_SET_DIR = './final_data/test_set/'
+TRAIN_SET_DIR = './full_images/train_set/'
+TEST_SET_DIR = './full_images/test_set/'
 
 IMAGE_SIZE = 64
 NUM_CHANNELS = 3
@@ -73,11 +73,11 @@ class StoreBestModel(object):
 			self.model_epoch = loss_history[-1]['epoch']
 			curr_net.save_weights_to(self.save_file)
 
-			with open('final4_breed_best.pk', 'wb') as out_file:
+			with open('full_best.pk', 'wb') as out_file:
 				pickle.dump(curr_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 		if loss_history[-1]['epoch'] % 100 == 0:
-			with open('final4_breed_it_{}.pk'.format(loss_history[-1]['epoch']), 'wb') as out_file:
+			with open('full_breed_it_{}.pk'.format(loss_history[-1]['epoch']), 'wb') as out_file:
 				pickle.dump(curr_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 def train_conv_network(X, y, X_i, y_i):
@@ -129,11 +129,11 @@ def train_conv_network(X, y, X_i, y_i):
 	    verbose=1,
 	)
 	
-	oth_net = pickle.load(open('final3_breed_it_100.pk', 'rb'))
-	conv_net.load_weights_from(oth_net)
+	#oth_net = pickle.load(open('full3_breed_it_100.pk', 'rb'))
+	#conv_net.load_weights_from(oth_net)
 	conv_net.fit(X, y)
 
-	with open('overnight_final4_breed.pk', 'wb') as out_file:
+	with open('full_breed.pk', 'wb') as out_file:
 		pickle.dump(conv_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 	return conv_net
@@ -213,7 +213,7 @@ accuracy = np.mean(y_pred == y_test)
 
 print 'TEST ACCURACY: {}'.format(accuracy)
 
-with open('overnight_final4_breed.pk', 'wb') as out_file:
+with open('full2_breed.pk', 'wb') as out_file:
 	pickle.dump(breed_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 pdb.set_trace()
