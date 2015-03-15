@@ -63,6 +63,8 @@ class StoreBestModel(object):
 		self.model_epoch = 0
 
 	def __call__(self, curr_net, loss_history):
+		print "EPOCH: {}, LOSS HISTORY LEN: {}".format(loss_history[-1]['epoch'], len(loss_history))
+
 		if loss_history[-1]['valid_loss'] < self.best_loss:
 			self.best_loss = loss_history[-1]['valid_loss']
 			self.model_epoch = loss_history[-1]['epoch']
@@ -114,7 +116,7 @@ def train_conv_network(X, y):
 
     	on_epoch_finished=[
 	        AdjustVariable('update_learning_rate', start=0.01, stop=0.0001),
-	        AdjustVariable('update_momentum', start=0.9, stop=0.999),
+	        AdjustVariable('update_momentum', start=0.9, stop=0.95),
 	        StoreBestModel('wb_final_breed.pk')
         ],
 
@@ -182,6 +184,6 @@ accuracy = np.mean(y_pred == y_test)
 print 'TEST ACCURACY: {}'.format(accuracy)
 
 with open('overnight_final2_breed.pk', 'wb') as out_file:
-	pickle.dump(conv_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
+	pickle.dump(breed_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 pdb.set_trace()

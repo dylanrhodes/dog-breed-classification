@@ -146,6 +146,7 @@ class AdjustVariable(object):
 			self.ls = np.linspace(self.start, self.stop, nn.max_epochs)
 
 		epoch = train_history[-1]['epoch']
+		print 'EPOCH: {}, LEARNING_RATE: {}'.format(epoch, self.ls[epoch - 1])
 		new_value = np.cast['float32'](self.ls[epoch - 1])
 		getattr(nn, self.name).set_value(new_value)
 

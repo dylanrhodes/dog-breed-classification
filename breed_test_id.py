@@ -104,9 +104,9 @@ def train_conv_network(X, y, X_i, y_i):
 
 		input_shape=(None, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE),
 		#conv1a_num_filters=32, conv1a_filter_size=(3, 3), 
-	    conv1_num_filters=64, conv1_filter_size=(3, 3), pool1_ds=(2, 2), dropout1_p=0.2,
+	    conv1_num_filters=64, conv1_filter_size=(7, 7), pool1_ds=(2, 2), dropout1_p=0.2,
 	    #conv2a_num_filters=64, conv2a_filter_size=(3, 3), 
-	    conv2_num_filters=128, conv2_filter_size=(3, 3), pool2_ds=(2, 2), dropout2_p=0.2,
+	    conv2_num_filters=128, conv2_filter_size=(5, 5), pool2_ds=(2, 2), dropout2_p=0.2,
 	    #conv3a_num_filters=256, conv3a_filter_size=(3, 3),
 	    conv3_num_filters=256, conv3_filter_size=(3, 3), pool3_ds=(2, 2), dropout3_p=0.3,
 	    hidden4_num_units=1800, dropout4_p=0.75, hidden5_num_units=1000,
@@ -168,9 +168,10 @@ random.shuffle(train_list)
 random.shuffle(test_list)
 
 X_train, y_train = load_data(train_list)
+X_test, y_test = load_data(test_list)
+
 breed_net = train_conv_network(X_train, y_train, X_test[:500], y_test[:500])
 
-X_test, y_test = load_data(test_list)
 y_pred = breed_net.predict(X_test)
 accuracy = np.mean(y_pred == y_test)
 
