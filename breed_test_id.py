@@ -66,7 +66,7 @@ class StoreBestModel(object):
 
 	def __call__(self, curr_net, loss_history):
 		y_pred = curr_net.predict(self.X)
-		#print "ACTUAL ACCURACY: {}".format(np.mean(y_pred == self.y))
+		print "ACTUAL ACCURACY: {}".format(np.mean(y_pred == self.y))
 
 		if loss_history[-1]['valid_loss'] < self.best_loss:
 			self.best_loss = loss_history[-1]['valid_loss']
@@ -84,15 +84,15 @@ def train_conv_network(X, y, X_i, y_i):
 	conv_net = NeuralNet(
 		layers=[
 			('input', layers.InputLayer),
-			('conv1a', layers.Conv2DLayer),
+			#('conv1a', layers.Conv2DLayer),
 			('conv1', layers.Conv2DLayer),
 			('pool1', layers.MaxPool2DLayer),
 			('dropout1', layers.DropoutLayer),
-			('conv2a', layers.Conv2DLayer),
+			#('conv2a', layers.Conv2DLayer),
         	('conv2', layers.Conv2DLayer),
 	        ('pool2', layers.MaxPool2DLayer),
 	        ('dropout2', layers.DropoutLayer),
-	        ('conv3a', layers.Conv2DLayer),
+	        #('conv3a', layers.Conv2DLayer),
 	        ('conv3', layers.Conv2DLayer),
 	        ('pool3', layers.MaxPool2DLayer),
 	        ('dropout3', layers.DropoutLayer),
@@ -103,12 +103,12 @@ def train_conv_network(X, y, X_i, y_i):
 		],
 
 		input_shape=(None, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE),
-		conv1a_num_filters=32, conv1a_filter_size=(3, 3), 
-	    conv1_num_filters=32, conv1_filter_size=(3, 3), pool1_ds=(2, 2), dropout1_p=0.2,
-	    conv2a_num_filters=64, conv2a_filter_size=(3, 3), 
-	    conv2_num_filters=64, conv2_filter_size=(3, 3), pool2_ds=(2, 2), dropout2_p=0.2,
-	    conv3a_num_filters=256, conv3a_filter_size=(3, 3),
-	    conv3_num_filters=256, conv3_filter_size=(3, 3), pool3_ds=(2, 2), dropout3_p=0.3,
+		#conv1a_num_filters=32, conv1a_filter_size=(3, 3), 
+	    conv1_num_filters=32, conv1_filter_size=(7, 7), pool1_ds=(2, 2), dropout1_p=0.2,
+	    #conv2a_num_filters=64, conv2a_filter_size=(3, 3), 
+	    conv2_num_filters=64, conv2_filter_size=(5, 5), pool2_ds=(2, 2), dropout2_p=0.2,
+	    #conv3a_num_filters=256, conv3a_filter_size=(3, 3),
+	    conv3_num_filters=128, conv3_filter_size=(3, 3), pool3_ds=(2, 2), dropout3_p=0.3,
 	    hidden4_num_units=1800, dropout4_p=0.75, hidden5_num_units=1000,
 	    output_num_units=133, output_nonlinearity=softmax,
 
@@ -124,7 +124,7 @@ def train_conv_network(X, y, X_i, y_i):
         ],
 
 	    regression=False,
-	    max_epochs=300,
+	    max_epochs=100,
 	    eval_size=0.05,
 	    verbose=1,
 	)
@@ -191,6 +191,8 @@ random.shuffle(train_list)
 random.shuffle(test_list)
 
 train_list = val_list + train_list
+
+train_list = train_list[:6200]
 
 X_train, y_train = load_data(train_list)
 X_test, y_test = load_data(test_list)
