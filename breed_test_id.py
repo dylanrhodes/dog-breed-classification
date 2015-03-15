@@ -183,7 +183,7 @@ for i, name in enumerate(train_list):
 	else:
 		new_train.append(name)
 
-pdb.set_trace()
+#pdb.set_trace()
 
 train_list = new_train
 
