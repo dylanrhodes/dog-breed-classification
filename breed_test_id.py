@@ -73,26 +73,26 @@ class StoreBestModel(object):
 			self.model_epoch = loss_history[-1]['epoch']
 			curr_net.save_weights_to(self.save_file)
 
-			with open('final3_breed_best.pk', 'wb') as out_file:
+			with open('final4_breed_best.pk', 'wb') as out_file:
 				pickle.dump(curr_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
-		if loss_history[-1]['epoch'] % 25 == 0:
-			with open('final3_breed_it_{}.pk'.format(loss_history[-1]['epoch']), 'wb') as out_file:
+		if loss_history[-1]['epoch'] % 100 == 0:
+			with open('final4_breed_it_{}.pk'.format(loss_history[-1]['epoch']), 'wb') as out_file:
 				pickle.dump(curr_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 def train_conv_network(X, y, X_i, y_i):
 	conv_net = NeuralNet(
 		layers=[
 			('input', layers.InputLayer),
-			#('conv1a', layers.Conv2DLayer),
+			('conv1a', layers.Conv2DLayer),
 			('conv1', layers.Conv2DLayer),
 			('pool1', layers.MaxPool2DLayer),
 			('dropout1', layers.DropoutLayer),
-			#('conv2a', layers.Conv2DLayer),
+			('conv2a', layers.Conv2DLayer),
         	('conv2', layers.Conv2DLayer),
 	        ('pool2', layers.MaxPool2DLayer),
 	        ('dropout2', layers.DropoutLayer),
-	        #('conv3a', layers.Conv2DLayer),
+	        ('conv3a', layers.Conv2DLayer),
 	        ('conv3', layers.Conv2DLayer),
 	        ('pool3', layers.MaxPool2DLayer),
 	        ('dropout3', layers.DropoutLayer),
@@ -103,13 +103,13 @@ def train_conv_network(X, y, X_i, y_i):
 		],
 
 		input_shape=(None, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE),
-		#conv1a_num_filters=32, conv1a_filter_size=(7, 7), 
-	    conv1_num_filters=32, conv1_filter_size=(7, 7), pool1_ds=(2, 2), dropout1_p=0.2,
-	    #conv2a_num_filters=64, conv2a_filter_size=(5, 5), 
-	    conv2_num_filters=64, conv2_filter_size=(5, 5), pool2_ds=(2, 2), dropout2_p=0.2,
-	    #conv3a_num_filters=128, conv3a_filter_size=(3, 3),
-	    conv3_num_filters=128, conv3_filter_size=(3, 3), pool3_ds=(2, 2), dropout3_p=0.3,
-	    hidden4_num_units=1800, dropout4_p=0.75, hidden5_num_units=1000,
+		conv1a_num_filters=32, conv1a_filter_size=(3, 3), 
+	    conv1_num_filters=64, conv1_filter_size=(3, 3), pool1_ds=(2, 2), dropout1_p=0.2,
+	    conv2a_num_filters=128, conv2a_filter_size=(3, 3), 
+	    conv2_num_filters=128, conv2_filter_size=(3, 3), pool2_ds=(2, 2), dropout2_p=0.3,
+	    conv3a_num_filters=256, conv3a_filter_size=(3, 3),
+	    conv3_num_filters=256, conv3_filter_size=(3, 3), pool3_ds=(2, 2), dropout3_p=0.4,
+	    hidden4_num_units=1800, dropout4_p=0.85, hidden5_num_units=1000,
 	    output_num_units=133, output_nonlinearity=softmax,
 
 	    batch_iterator_train=AugmentBatchIterator(batch_size=700),
@@ -118,20 +118,22 @@ def train_conv_network(X, y, X_i, y_i):
     	update_momentum=theano.shared(np.cast['float32'](0.9)),
 
     	on_epoch_finished=[
-	        AdjustVariable('update_learning_rate', start=0.01, stop=0.00001),
+	        AdjustVariable('update_learning_rate', start=0.01, stop=0.0001),
 	        AdjustVariable('update_momentum', start=0.9, stop=0.95),
-	        StoreBestModel('wb_final3_breed.pk', X_i, y_i)
+	        StoreBestModel('wb_final4_breed.pk', X_i, y_i)
         ],
 
 	    regression=False,
-	    max_epochs=350,
+	    max_epochs=300,
 	    eval_size=0.05,
 	    verbose=1,
 	)
-
+	
+	oth_net = pickle.load(open('final3_breed_it_100.pk', 'rb'))
+	conv_net.load_weights_from(oth_net)
 	conv_net.fit(X, y)
 
-	with open('overnight_final3_breed.pk', 'wb') as out_file:
+	with open('overnight_final4_breed.pk', 'wb') as out_file:
 		pickle.dump(conv_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 	return conv_net
@@ -211,7 +213,7 @@ accuracy = np.mean(y_pred == y_test)
 
 print 'TEST ACCURACY: {}'.format(accuracy)
 
-with open('overnight_final3_breed.pk', 'wb') as out_file:
+with open('overnight_final4_breed.pk', 'wb') as out_file:
 	pickle.dump(breed_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 pdb.set_trace()
