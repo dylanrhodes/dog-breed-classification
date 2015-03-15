@@ -164,8 +164,28 @@ def train_dense_network(X, y):
 train_list = [TRAIN_SET_DIR + file_name for file_name in listdir(TRAIN_SET_DIR)]
 test_list = [TEST_SET_DIR + file_name for file_name in listdir(TEST_SET_DIR)]
 
-val_list = train_list[:1200]
-train_list = train_list[1200:]
+train_list = sorted(train_list)
+
+choices = np.random.choice(len(train_list) / 6, 200, replace=False)
+choices *= 6
+val_arr = list(choices)
+oth_arr = np.copy(choices)
+
+for i in xrange(5):
+	oth_arr += 1
+	val_arr = val_arr + list(oth_arr)
+
+new_train = []
+
+for i, name in enumerate(train_list):
+	if i in val_arr:
+		val_list.append(name)
+	else:
+		new_train.append(name)
+
+pdb.set_trace()
+
+train_list = new_train
 
 random.shuffle(train_list)
 random.shuffle(test_list)
