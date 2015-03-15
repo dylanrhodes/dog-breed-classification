@@ -65,8 +65,8 @@ class StoreBestModel(object):
 		self.y = y_i
 
 	def __call__(self, curr_net, loss_history):
-		y_pred = curr_net.predict(X_i)
-		print "ACTUAL ACCURACY: {}".format(np.mean(y_pred == y_i))
+		y_pred = curr_net.predict(self.X)
+		print "ACTUAL ACCURACY: {}".format(np.mean(y_pred == self.y))
 
 		if loss_history[-1]['valid_loss'] < self.best_loss:
 			self.best_loss = loss_history[-1]['valid_loss']
@@ -104,11 +104,11 @@ def train_conv_network(X, y, X_i, y_i):
 
 		input_shape=(None, NUM_CHANNELS, IMAGE_SIZE, IMAGE_SIZE),
 		#conv1a_num_filters=32, conv1a_filter_size=(3, 3), 
-	    conv1_num_filters=64, conv1_filter_size=(7, 7), pool1_ds=(2, 2), dropout1_p=0.2,
+	    conv1_num_filters=32, conv1_filter_size=(7, 7), pool1_ds=(2, 2), dropout1_p=0.2,
 	    #conv2a_num_filters=64, conv2a_filter_size=(3, 3), 
-	    conv2_num_filters=128, conv2_filter_size=(5, 5), pool2_ds=(2, 2), dropout2_p=0.2,
+	    conv2_num_filters=64, conv2_filter_size=(5, 5), pool2_ds=(2, 2), dropout2_p=0.2,
 	    #conv3a_num_filters=256, conv3a_filter_size=(3, 3),
-	    conv3_num_filters=256, conv3_filter_size=(3, 3), pool3_ds=(2, 2), dropout3_p=0.3,
+	    conv3_num_filters=128, conv3_filter_size=(3, 3), pool3_ds=(2, 2), dropout3_p=0.3,
 	    hidden4_num_units=1800, dropout4_p=0.75, hidden5_num_units=1000,
 	    output_num_units=133, output_nonlinearity=softmax,
 
