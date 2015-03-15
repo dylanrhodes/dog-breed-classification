@@ -13,7 +13,7 @@ import theano
 from load_theano_data import AdjustVariable, plot_loss
 
 TRAIN_SET_DIR = './final_data/train_set/'
-TEST_SET_DIR = './cropped_images/test_set/'
+TEST_SET_DIR = './final_data/test_set/'
 
 IMAGE_SIZE = 64
 NUM_CHANNELS = 3
@@ -164,7 +164,7 @@ random.shuffle(test_list)
 
 X_train, y_train = load_data(train_list)
 #breed_net = train_conv_network(X_train, y_train)
-breed_net = pickle.load(open('final2_breed_best.pk', 'rb'))
+breed_net = pickle.load(open('final_breed_best.pk', 'rb'))
 
 X_test, y_test = load_data(test_list)
 y_pred = breed_net.predict(X_test)
