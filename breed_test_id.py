@@ -108,7 +108,7 @@ def train_conv_network(X, y, X_i, y_i):
 	    conv2a_num_filters=64, conv2a_filter_size=(3, 3), 
 	    conv2_num_filters=64, conv2_filter_size=(3, 3), pool2_ds=(2, 2), dropout2_p=0.2,
 	    conv3a_num_filters=256, conv3a_filter_size=(3, 3),
-	    conv3_num_filters=128, conv3_filter_size=(3, 3), pool3_ds=(2, 2), dropout3_p=0.3,
+	    conv3_num_filters=256, conv3_filter_size=(3, 3), pool3_ds=(2, 2), dropout3_p=0.3,
 	    hidden4_num_units=1800, dropout4_p=0.75, hidden5_num_units=1000,
 	    output_num_units=133, output_nonlinearity=softmax,
 
