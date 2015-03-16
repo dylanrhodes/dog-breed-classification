@@ -63,7 +63,7 @@ class StoreBestModel(object):
 		self.model_epoch = 0
 
 	def __call__(self, curr_net, loss_history):
-		print "EPOCH: {}, LOSS HISTORY LEN: {}".format(loss_history[-1]['epoch'], len(loss_history))
+		#print "EPOCH: {}, LOSS HISTORY LEN: {}".format(loss_history[-1]['epoch'], len(loss_history))
 
 		if loss_history[-1]['valid_loss'] < self.best_loss:
 			self.best_loss = loss_history[-1]['valid_loss']
