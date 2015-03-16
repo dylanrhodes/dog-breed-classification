@@ -70,11 +70,11 @@ class StoreBestModel(object):
 			self.model_epoch = loss_history[-1]['epoch']
 			curr_net.save_weights_to(self.save_file)
 
-			with open('final2_breed_best.pk', 'wb') as out_file:
+			with open('final5_breed_best.pk', 'wb') as out_file:
 				pickle.dump(curr_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 		if loss_history[-1]['epoch'] % 100 == 0:
-			with open('final2_breed_it_{}.pk'.format(loss_history[-1]['epoch']), 'wb') as out_file:
+			with open('final5_breed_it_{}.pk'.format(loss_history[-1]['epoch']), 'wb') as out_file:
 				pickle.dump(curr_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 def train_conv_network(X, y):
@@ -121,7 +121,7 @@ def train_conv_network(X, y):
         ],
 
 	    regression=False,
-	    max_epochs=650,
+	    max_epochs=1000,
 	    eval_size=0.05,
 	    verbose=1,
 	)
@@ -165,8 +165,8 @@ random.shuffle(train_list)
 random.shuffle(test_list)
 
 X_train, y_train = load_data(train_list)
-#breed_net = train_conv_network(X_train, y_train)
-breed_net = pickle.load(open('final_breed_best.pk', 'rb'))
+breed_net = train_conv_network(X_train, y_train)
+#breed_net = pickle.load(open('final_breed_best.pk', 'rb'))
 
 X_test, y_test = load_data(test_list)
 y_pred = breed_net.predict(X_test)
@@ -183,7 +183,7 @@ accuracy = np.mean(y_pred == y_test)
 
 print 'TEST ACCURACY: {}'.format(accuracy)
 
-with open('overnight_final2_breed.pk', 'wb') as out_file:
+with open('overnight_final5_breed.pk', 'wb') as out_file:
 	pickle.dump(breed_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 pdb.set_trace()
