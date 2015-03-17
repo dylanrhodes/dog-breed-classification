@@ -126,6 +126,8 @@ def train_conv_network(X, y):
 	    verbose=1,
 	)
 
+	oth_net = pickle.load(open('final5_breed_best.pk', 'rb'))
+	conv_net.load_weights_from(oth_net)
 	conv_net.fit(X, y)
 
 	with open('overnight_final_breed.pk', 'wb') as out_file:
@@ -165,8 +167,8 @@ random.shuffle(train_list)
 random.shuffle(test_list)
 
 X_train, y_train = load_data(train_list)
-breed_net = train_conv_network(X_train, y_train)
-#breed_net = pickle.load(open('final_breed_best.pk', 'rb'))
+#breed_net = train_conv_network(X_train, y_train)
+breed_net = pickle.load(open('final5_breed_best.pk', 'rb'))
 
 X_test, y_test = load_data(test_list)
 y_pred = breed_net.predict(X_test)
@@ -175,15 +177,14 @@ accuracy = np.mean(y_pred == y_test)
 print 'CHECK ACCURACY: {}'.format(accuracy)
 
 pdb.set_trace()
-breed_net.fit(X_train, y_train)
+#breed_net.fit(X_train, y_train)
 
-#X_test, y_test = load_data(test_list)
 y_pred = breed_net.predict(X_test)
 accuracy = np.mean(y_pred == y_test)
 
 print 'TEST ACCURACY: {}'.format(accuracy)
 
-with open('overnight_final5_breed.pk', 'wb') as out_file:
-	pickle.dump(breed_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
+#with open('overnight_final5_breed.pk', 'wb') as out_file:
+#	pickle.dump(breed_net, out_file, protocol=pickle.HIGHEST_PROTOCOL)
 
 pdb.set_trace()
