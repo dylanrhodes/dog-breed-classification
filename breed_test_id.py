@@ -12,8 +12,8 @@ import theano
 
 from load_theano_data import AdjustVariable, plot_loss
 
-TRAIN_SET_DIR = './full_images/train_set/'
-TEST_SET_DIR = './full_images/test_set/'
+TRAIN_SET_DIR = './final_data/train_set/'
+TEST_SET_DIR = './final_data/test_set/'
 
 IMAGE_SIZE = 64
 NUM_CHANNELS = 3
