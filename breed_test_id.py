@@ -65,8 +65,9 @@ class StoreBestModel(object):
 		self.y = y_i
 
 	def __call__(self, curr_net, loss_history):
-		y_pred = curr_net.predict(self.X)
-		print "ACTUAL ACCURACY: {}".format(np.mean(y_pred == self.y))
+		if loss_history[-1]['epoch'] % 10 == 0:
+			y_pred = curr_net.predict(self.X)
+			print "ACTUAL ACCURACY: {}".format(np.mean(y_pred == self.y))
 
 		if loss_history[-1]['valid_loss'] < self.best_loss:
 			self.best_loss = loss_history[-1]['valid_loss']
@@ -118,13 +119,13 @@ def train_conv_network(X, y, X_i, y_i):
     	update_momentum=theano.shared(np.cast['float32'](0.9)),
 
     	on_epoch_finished=[
-	        AdjustVariable('update_learning_rate', start=0.01, stop=0.0001),
+	        AdjustVariable('update_learning_rate', start=0.008, stop=0.00001),
 	        AdjustVariable('update_momentum', start=0.9, stop=0.95),
 	        StoreBestModel('wb_final4_breed.pk', X_i, y_i)
         ],
 
 	    regression=False,
-	    max_epochs=300,
+	    max_epochs=1000,
 	    eval_size=0.05,
 	    verbose=1,
 	)
@@ -199,7 +200,7 @@ train_list = val_list + train_list
 X_train, y_train = load_data(train_list)
 X_test, y_test = load_data(test_list)
 
-breed_net = train_conv_network(X_train, y_train, X_test[:500], y_test[:500])
+breed_net = train_conv_network(X_train, y_train, X_test, y_test)
 
 y_pred = breed_net.predict(X_test)
 accuracy = np.mean(y_pred == y_test)
